@@ -1,0 +1,152 @@
+<resources>
+    <string name="app_name">Square OFF</string>
+    <string name="title_activity_main2">Main2Activity</string>
+
+    <string-array name="Transaction_type">
+
+        <item>Select ....</item>
+        <item>SC-FC</item>
+
+    </string-array>
+
+    <string-array name="Receive_transaction_type">
+
+        <item>Select ....</item>
+        <item>SC-FC</item>
+        <item>3P-SC</item>
+        <item>3P-FC</item>
+
+    </string-array>
+
+    <string-array name="SCs">
+
+        <item>Select ....</item>
+        <item>AMDD</item>
+        <item>BBID</item>
+        <item>BLRH</item>
+        <item>BLRZ</item>
+        <item>BOM5</item>
+        <item>BOM8</item>
+        <item>BOM9</item>
+        <item>BOMD</item>
+        <item>CCUY</item>
+        <item>CJBX</item>
+        <item>COKE</item>
+        <item>DEL9</item>
+        <item>DELU</item>
+        <item>DELV</item>
+        <item>HYDF</item>
+        <item>HYDF</item>
+        <item>HYDF</item>
+        <item>HYDW</item>
+        <item>IDRW</item>
+        <item>JAID</item>
+        <item>LKOU</item>
+        <item>LUHX</item>
+        <item>MAAD</item>
+        <item>NAGX</item>
+        <item>PNQF</item>
+        <item>SCCB</item>
+        <item>SDEH</item>
+        <item>STVV</item>
+        <item>SXVD</item>
+        <item>VGAU</item>
+
+    </string-array>
+
+    <string-array name="FCs">
+
+        <item>Select ....</item>
+        <item>AMD1</item>
+        <item>BLR5</item>
+        <item>BLR7</item>
+        <item>BOM1</item>
+        <item>BOM3</item>
+        <item>BOM4</item>
+        <item>DEL2</item>
+        <item>DEL3</item>
+        <item>DEL4</item>
+        <item>DEL5</item>
+        <item>GAUX</item>
+        <item>HYD8</item>
+        <item>MAA4</item>
+        <item>MAA5</item>
+        <item>MAAY</item>
+        <item>NAG1</item>
+        <item>PATX</item>
+        <item>SAMD</item>
+        <item>SATA</item>
+        <item>SATB</item>
+        <item>SBHA</item>
+        <item>SBLB</item>
+        <item>SBLB</item>
+        <item>SBLC</item>
+        <item>SBOA</item>
+        <item>SBOB</item>
+        <item>SBOC</item>
+        <item>SBOE</item>
+        <item>SCCA</item>
+        <item>SCCB</item>
+        <item>SCCC</item>
+        <item>SCCF</item>
+        <item>SCJA</item>
+        <item>SCJB</item>
+        <item>SDEA</item>
+        <item>SDEB</item>
+        <item>SDEC</item>
+        <item>SDED</item>
+        <item>SDEE</item>
+        <item>SDEF</item>
+        <item>SDEG</item>
+        <item>SDEH</item>
+        <item>SHYB</item>
+        <item>SIDA</item>
+        <item>SJAB</item>
+        <item>SLKA</item>
+        <item>SLKA</item>
+        <item>SLKB</item>
+        <item>SMAB</item>
+        <item>SPNA</item>
+        <item>SPNC</item>
+        <item>SVGA</item>
+        <item>XEAA</item>
+        <item>XNAB</item>
+        <item>XSAD</item>
+        <item>XSAJ</item>
+        <item>XWAA</item>
+        <item>XWAE</item>
+        <item>XWAL</item>
+
+    </string-array>
+
+    <string-array name="ThreePs">
+
+        <item>Select ....</item>
+        <item>Aramex</item>
+        <item>Bluedart</item>
+        <item>DHL</item>
+        <item>Delhivery</item>
+        <item>EcomEx</item>
+        <item>FedEx</item>
+        <item>Gati</item>
+        <item>IPS</item>
+        <item>Self-Ship</item>
+
+    </string-array>
+
+
+    <string-array name="shipment_type">
+
+        <item>Select ....</item>
+        <item>Regular</item>
+        <item>Orphan</item>
+        <item>PCP</item>
+        <item>Damaged</item>
+
+    </string-array>
+
+    <string-array name="menu">
+        <item>Delete</item>
+    </string-array>
+
+</resources>
