@@ -2,13 +2,11 @@ package com.example.myapplication;
 
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
-import android.net.Uri;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
@@ -16,7 +14,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.google.zxing.Result;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
@@ -27,6 +29,7 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
     private static final int REQUEST_CAMERA = 1;
     private ZXingScannerView scannerView;
     private static int camId = Camera.CameraInfo.CAMERA_FACING_BACK;
+    String type = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +37,9 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
 
         scannerView = new ZXingScannerView(this);
         setContentView(scannerView);
-        int currentApiVersion = Build.VERSION.SDK_INT;
 
+        type = getIntent().getStringExtra("Type");
+        int currentApiVersion = Build.VERSION.SDK_INT;
         if(currentApiVersion >=  Build.VERSION_CODES.M)
         {
             if(checkPermission())
@@ -127,27 +131,92 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
     @Override
     public void handleResult(Result result) {
         final String myResult = result.getText();
-        Log.d("QRCodeScanner", result.getText());
-        Log.d("QRCodeScanner", result.getBarcodeFormat().toString());
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Scan Result");
-        builder.setPositiveButton("Add this Item", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                UploadActivity.trId.add(myResult);
-                scannerView.resumeCameraPreview(ScanActivity.this);
-            }
-        });
+        if(type.equals("Upload")){
+            builder.setPositiveButton("Add this Item", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    UploadActivity.trId.add(myResult);
+                    scannerView.stopCamera();
+                    MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.success_sound);
+                    mp.start();
+                    AlertDialog.Builder builder1 = new AlertDialog.Builder(ScanActivity.this);
+                    builder1.setTitle("Success :");
+                    builder1.setMessage("Package Added ... ");
+                    builder1.setPositiveButton("Scan More", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            scannerView.startCamera();
+                            scannerView.resumeCameraPreview(ScanActivity.this);
+                        }
+                    });
+                    builder1.setNeutralButton("Done", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();
+                        }
+                    });
+                    final AlertDialog dlg = builder1.create();
+                    dlg.show();
+                    dlg.setCancelable(false);
+                }
+            });
+
+        }else if(type.equals("Receive")){
+            builder.setPositiveButton("Receive this Item", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    receive(myResult);
+                    scannerView.resumeCameraPreview(ScanActivity.this);
+                }
+            });
+        }
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 scannerView.resumeCameraPreview(ScanActivity.this);
             }
         });
-        builder.setMessage(result.getText());
+        builder.setMessage(myResult);
         AlertDialog alert1 = builder.create();
         alert1.show();
 
     }
+
+    private void receive(String trackingID) {
+
+
+
+
+
+
+
+        scannerView.stopCamera();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Success :");
+        builder.setMessage("Package Reconciled... ");
+        builder.setPositiveButton("Scan More", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                scannerView.startCamera();
+                scannerView.resumeCameraPreview(ScanActivity.this);
+            }
+        });
+        builder.setNeutralButton("Done", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+        final AlertDialog dlg = builder.create();
+        dlg.show();
+        dlg.setCancelable(false);
+        MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.success_sound);
+        mp.start();
+
+    }
+
+
 }

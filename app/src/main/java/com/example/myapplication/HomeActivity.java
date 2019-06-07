@@ -1,16 +1,15 @@
 package com.example.myapplication;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 import android.animation.ObjectAnimator;
 import android.app.ActivityOptions;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.SyncStateContract;
-import android.transition.Transition;
-import android.transition.TransitionInflater;
 import android.util.Pair;
 import android.view.View;
 
@@ -79,7 +78,7 @@ public class HomeActivity extends AppCompatActivity implements View .OnClickList
                     tempv = v.findViewById(R.id.appCompatImageView);
                     pair[0] = new Pair<View,String>(tempv,"transitionimage");
 
-                    tempv = v.findViewById(R.id.textView);
+                    tempv = v.findViewById(R.id.heading);
                     pair[1] = new Pair<View,String>(tempv,"transitiontext");
 
                     options = ActivityOptions.makeSceneTransitionAnimation(this,pair);

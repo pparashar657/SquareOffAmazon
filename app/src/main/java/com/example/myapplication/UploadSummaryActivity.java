@@ -21,7 +21,7 @@ import java.util.List;
 
 import static android.widget.GridLayout.HORIZONTAL;
 
-public class SummaryActivity extends AppCompatActivity {
+public class UploadSummaryActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;

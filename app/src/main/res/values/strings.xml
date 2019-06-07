@@ -145,6 +145,28 @@
 
     </string-array>
 
+    <string-array name="marked_under">
+        <item>Select ....</item>
+        <item>Switcheroo - FC Add Item</item>
+        <item>Switcheroo - Missort</item>
+        <item>Switcheroo - Inapp Verified by LastMile</item>
+        <item>Switcheroo - Customer claimed Switcheroo</item>
+        <item>Case - D and E</item>
+        <item>Damaged and Destroy</item>
+        <item>Missort</item>
+        <item>C-ret Processed</item>
+        <item>Mark Shipment as Missing (AM only)</item>
+    </string-array>
+
+    <string-array name="marked_under2">
+        <item>Select ....</item>
+        <item>Orphan processed - Open Tracking ID</item>
+        <item>Orphan processed - IMEI or Serial no</item>
+        <item>Orphan - FC Add Item</item>
+        <item>Orphan - Missort</item>
+        <item>True Orphan</item>
+    </string-array>
+
     <string-array name="menu">
         <item>Delete</item>
     </string-array>

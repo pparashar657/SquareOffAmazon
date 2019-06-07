@@ -10,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -49,7 +50,6 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
     public static List<String> trId;
     Intent intent;
 
-    public static final String choose = "Select ....";
     String transaction_type = "";
     String source = "";
     String destination = "";
@@ -72,7 +72,7 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
         summary = (MaterialButton) findViewById(R.id.summary);
         home = (MaterialButton) findViewById(R.id.home);
         upload = (MaterialButton) findViewById(R.id.upload);
-        groupId = (TextInputEditText) findViewById(R.id.groupId);
+        groupId = (TextInputEditText) findViewById(R.id.newtrackingid);
         trId = new ArrayList<String>();
         setAdapter();
         choose_file.setOnClickListener(this);
@@ -82,6 +82,22 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
         upload.setOnClickListener(this);
 
 
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Alert :");
+        builder.setMessage("Are you sure, you want to exit? ");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                UploadActivity.super.onBackPressed();
+            }
+        });
+        builder.setNeutralButton("Cancel",null);
+        builder.create().show();
     }
 
     private void setAdapter() {
@@ -113,27 +129,30 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onClick(View v) {
 
-        switch (v.getId()){
-            case R.id.choose_file :
-                choose();
-                break;
-
-            case R.id.scan_items :
-                scan();
-                break;
-
-            case R.id.summary :
-                summary();
-                break;
-
-            case R.id.home :
+        if(v.getId() == R.id.home){
                 home();
                 finish();
-                break;
+        }else{
 
-            case R.id.upload :
-                upload();
-                break;
+           if(iscomplete()){
+                switch (v.getId()){
+                    case R.id.choose_file :
+                        choose();
+                        break;
+
+                    case R.id.scan_items :
+                        scan();
+                        break;
+
+                    case R.id.summary :
+                        summary();
+                        break;
+
+                    case R.id.upload :
+                        upload();
+                        break;
+                }
+            }
         }
 
     }
@@ -141,6 +160,7 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
 
     private void scan() {
         intent = new Intent(this,ScanActivity.class);
+        intent.putExtra("Type","Upload");
         startActivity(intent);
     }
 
@@ -149,7 +169,7 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
         if(trId.isEmpty()){
             Snackbar.make(findViewById(R.id.upload_parent),"Nothing To Show ....",Snackbar.LENGTH_LONG).show();
         } else{
-            intent = new Intent(this,SummaryActivity.class);
+            intent = new Intent(this, UploadSummaryActivity.class);
             startActivity(intent);
         }
 
@@ -163,16 +183,10 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
 
     private void upload() {
 
-        if(!iscomplete()){
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("ERROR");
-            builder.setMessage("Please Complete the details before Uploading.");
-            builder.setPositiveButton("Ok", null);
-            builder.create().show();
-        }else if(trId.isEmpty()){
+        if(trId.isEmpty()){
             Snackbar.make(findViewById(R.id.upload_parent),"Nothing To Upload ....",Snackbar.LENGTH_LONG).show();
         }else {
-            updateDB();
+            update();
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Success :) ");
             builder.setMessage("Successfully Uploaded "+ trId.size() + " Records.");
@@ -195,15 +209,14 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
             builder.setCancelable(false);
             builder.create().show();
 
+            MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.success_sound);
+            mp.start();
         }
 
 
     }
 
-    private void updateDB() {
-
-
-
+    private void update() {
 
 
 
@@ -218,14 +231,25 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
         shipment_type = shipment_spinner.getSelectedItem().toString();
         groupid = groupId.getText().toString();
 
-        if(transaction_type.equals(choose) || source.equals(choose) || destination.equals(choose) || shipment_type.equals(choose) || groupid.equals("")){
-            Log.e("Choose","Returning false");
+        if(transaction_type.equals(Constants.choose)){
+            Snackbar.make(findViewById(R.id.upload_parent),"Enter a Transaction Type ....",Snackbar.LENGTH_LONG).show();
             return false;
-
+        }else if(source.equals(Constants.choose)){
+            Snackbar.make(findViewById(R.id.upload_parent),"Enter the Source Node ....",Snackbar.LENGTH_LONG).show();
+            return false;
+        }else if(destination.equals(Constants.choose)){
+            Snackbar.make(findViewById(R.id.upload_parent),"Enter the Destination Node ....",Snackbar.LENGTH_LONG).show();
+            return false;
+        }else if(shipment_type.equals(Constants.choose)){
+            Snackbar.make(findViewById(R.id.upload_parent),"Enter the Shipment Type ....",Snackbar.LENGTH_LONG).show();
+            return false;
+        }else if(groupid.equals("")){
+            Snackbar.make(findViewById(R.id.upload_parent),"Enter the Challan No....",Snackbar.LENGTH_LONG).show();
+            return false;
         }else{
-            Log.e("Choose","Returning True");
             return true;
         }
+
     }
 
     private void choose() {
@@ -353,6 +377,9 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
         builder.setMessage("Successfully Added "+file_size+" records.");
         builder.setPositiveButton("Ok", null);
         builder.create().show();
+        MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.success_sound);
+        mp.start();
+
     }
 
     public String getColunmData( Uri uri, String selection, String[] selectarg){

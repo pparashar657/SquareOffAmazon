@@ -4,6 +4,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -185,6 +186,26 @@ public class ReceiveActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     @Override
+    public void onBackPressed() {
+
+        if(trans_spinner.getSelectedItem().toString().equals(Constants.choose)){
+            super.onBackPressed();
+        }else{
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Alert :");
+            builder.setMessage("Are you sure, you want to exit? ");
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    ReceiveActivity.super.onBackPressed();
+                }
+            });
+            builder.setNeutralButton("Cancel",null);
+            builder.create().show();
+        }
+    }
+
+    @Override
     public void onClick(View v) {
 
         if(v.getId() == R.id.autogeneratebutton){
@@ -192,18 +213,10 @@ public class ReceiveActivity extends AppCompatActivity implements View.OnClickLi
             source = source_spinner.getSelectedItem().toString();
             target = dest_spinner.getSelectedItem().toString();
             if(source.equals(Constants.choose)){
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle("Error :");
-                builder.setMessage("Please select the Source Node.");
-                builder.setPositiveButton("Ok", null);
-                builder.create().show();
-            }else if(target.equals(Constants.choose)){
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle("Error :");
-                builder.setMessage("Please select the Target Node.");
-                builder.setPositiveButton("Ok", null);
-                builder.create().show();
-            }else {
+                Snackbar.make(parent,"Please enter the Source Node ...",Snackbar.LENGTH_LONG).show();
+            } else if(target.equals(Constants.choose)){
+                Snackbar.make(parent,"Please enter the Target Node ...",Snackbar.LENGTH_LONG).show();
+            } else {
                 String curTime = (Calendar.getInstance().getTime()).toString().replaceAll(" ","-").substring(0,19);
                 groupID = source+"_"+target+"_"+curTime;
                 groupid.setText(groupID);
@@ -212,7 +225,6 @@ public class ReceiveActivity extends AppCompatActivity implements View.OnClickLi
         }
         else{
             if(!isComplete()){
-                Snackbar.make(parent,"Please Complete The Details...",Snackbar.LENGTH_LONG).show();
 
             }else if(!isValid()){
 
@@ -220,8 +232,9 @@ public class ReceiveActivity extends AppCompatActivity implements View.OnClickLi
                 builder.setTitle("Error :");
                 builder.setMessage("Cannot find matching Target station and Challan no. Please Try again! ");
                 builder.setPositiveButton("Ok", null);
-                builder.create().show();
-
+                AlertDialog alert = builder.create();
+                alert.show();
+                alert.setCancelable(false);
 
             } else {
 
@@ -270,9 +283,55 @@ public class ReceiveActivity extends AppCompatActivity implements View.OnClickLi
 
 
     }
+    private void scan() {
+        intent = new Intent(this,ScanActivity.class);
+        intent.putExtra("Type","Receive");
+        startActivity(intent);
+    }
+
+
+
+    private boolean isComplete(){
+
+
+        if(!isSCFC){
+
+            if(source_spinner.getSelectedItem().toString().equals(Constants.choose)){
+                Snackbar.make(parent,"Please enter the Source Node ...",Snackbar.LENGTH_LONG).show();
+                return false;
+            }
+        }
+
+        if(dest_spinner.getSelectedItem().toString().equals(Constants.choose)){
+            Snackbar.make(parent,"Please enter the Target Node ...",Snackbar.LENGTH_LONG).show();
+            return false;
+        }else if(groupid.getText().toString().equals("")){
+            Snackbar.make(parent,"Please enter a Valid Challan No ...",Snackbar.LENGTH_LONG).show();
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    private void summary() {
+        intent =  new Intent(this,ReceiveSummaryActivity.class);
+        startActivity(intent);
+
+    }
+
+
+    private boolean isValid() {
+
+        // Checks wheather the groupid and Target node have a valid entry.
+
+        groupID = groupid.getText().toString();
+        target = dest_spinner.getSelectedItem().toString();
+
+
+        return true;
+    }
 
     private void receive(String toString) {
-
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Success :");
@@ -293,44 +352,10 @@ public class ReceiveActivity extends AppCompatActivity implements View.OnClickLi
 
     }
 
-    private void scan() {
-        intent = new Intent(this,ScanActivity.class);
-        intent.putExtra("Type","Receive");
-        startActivity(intent);
-    }
 
     private void submit() {
-    }
-
-    private void summary() {
-       intent =  new Intent(this,ReceiveSummaryActivity.class);
-       startActivity(intent);
-
-    }
-
-    private boolean isValid() {
-
-        // Checks wheather the groupid and Target node have a valid entry.
-
-        groupID = groupid.getText().toString();
-        target = dest_spinner.getSelectedItem().toString();
 
 
-        return true;
-    }
 
-
-    private boolean isComplete(){
-
-        boolean flag = true;
-        if(dest_spinner.getSelectedItem().toString().equals(Constants.choose) || groupid.getText().toString().equals("")){
-            flag = false;
-        }
-        if(!isSCFC){
-            if(source_spinner.getSelectedItem().toString().equals(Constants.choose)){
-                flag = false;
-            }
-        }
-        return flag;
     }
 }

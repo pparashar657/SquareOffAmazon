@@ -6,7 +6,7 @@
     android:background="@color/primaryLightColor"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SummaryActivity">
+    tools:context=".UploadSummaryActivity">
 
     <TextView
         android:id="@+id/textView9"

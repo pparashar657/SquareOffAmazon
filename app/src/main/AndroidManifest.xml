@@ -16,8 +16,10 @@
         android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ScanActivity"></activity>
-        <activity android:name=".SummaryActivity" />
+        <activity android:name=".Problem"></activity>
+        <activity android:name=".ReceiveSummaryActivity" />
+        <activity android:name=".ScanActivity" />
+        <activity android:name=".UploadSummaryActivity" />
         <activity
             android:name=".FindItemActivity"
             android:screenOrientation="portrait" />
