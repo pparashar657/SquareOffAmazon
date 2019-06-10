@@ -112,7 +112,6 @@
                 android:textColor="#5c4200"
                 android:textSize="20dp"
                 android:textStyle="bold|italic"
-                android:visibility="gone"
                 app:layout_constraintBottom_toTopOf="@+id/targettext"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/transtext" />
@@ -122,7 +121,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:visibility="gone"
                 android:layout_marginEnd="4dp"
                 app:layout_constraintBottom_toBottomOf="@id/sourcetext"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -146,7 +144,6 @@
                 android:textColor="#5c4200"
                 android:textSize="20dp"
                 android:textStyle="bold|italic"
-                android:visibility="gone"
                 app:layout_constraintBottom_toTopOf="@+id/challanlayout"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/sourcetext" />
@@ -155,7 +152,6 @@
                 android:id="@+id/destination_spinner"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="4dp"
                 app:layout_constraintBottom_toBottomOf="@id/targettext"
@@ -170,7 +166,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:visibility="gone"
                 app:layout_constraintBottom_toTopOf="@+id/autogeneratebutton"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -224,9 +219,7 @@
                 android:id="@+id/autogeneratebutton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:layout_marginEnd="20dp"
-                android:visibility="gone"
                 android:backgroundTint="#a36708"
                 android:shadowColor="#000000"
                 android:shadowDx="2"
@@ -235,7 +228,7 @@
                 android:text="Auto-Generate Challan No"
                 android:textAllCaps="false"
                 android:textSize="16dp"
-                app:layout_constraintBottom_toTopOf="@+id/manualbutton"
+                app:layout_constraintBottom_toTopOf="@+id/submitCheck"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/challanlayout" />
 
@@ -349,8 +342,31 @@
                 app:layout_constraintStart_toEndOf="@+id/summarybutton"
                 app:layout_constraintTop_toBottomOf="@+id/scanbutton" />
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/submitCheck"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:backgroundTint="@color/green"
+                android:text="Submit"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/autogeneratebutton" />
+
+            <ProgressBar
+                android:id="@+id/progress"
+                android:layout_width="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="8dp"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/autogeneratebutton"
+                android:layout_height="wrap_content" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

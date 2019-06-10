@@ -316,7 +316,6 @@
             app:strokeColor="@color/black"
             app:strokeWidth="2dp" />
 
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

@@ -37,9 +37,6 @@ public class UploadSummaryActivity extends AppCompatActivity {
         adapter = new RecyclerAdapter(UploadActivity.trId);
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),DividerItemDecoration.VERTICAL);
-        dividerItemDecoration.setDrawable(ContextCompat.getDrawable(recyclerView.getContext(), R.drawable.divider));
-        recyclerView.addItemDecoration(dividerItemDecoration);
 
     }
 

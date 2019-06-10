@@ -23,15 +23,15 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        TextView textView = (TextView) LayoutInflater.from(parent.getContext()).inflate(R.layout.textlayoutsummary,parent,false);
-        MyViewHolder holder = new MyViewHolder(textView);
+        View v =  LayoutInflater.from(parent.getContext()).inflate(R.layout.textlayoutsummary,parent,false);
+        MyViewHolder holder = new MyViewHolder(v);
         return holder;
     }
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         final String temp = list.get(position);
-        holder.verssionname.setText(list.get(position));
+        holder.packageId.setText(list.get(position));
     }
 
     @Override
@@ -46,12 +46,12 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
 
     public static class MyViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener{
 
-        TextView verssionname;
+        TextView packageId;
 
-        public MyViewHolder(@NonNull TextView itemView) {
+        public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            verssionname = itemView;
-            verssionname.setOnCreateContextMenuListener(this);
+            packageId = (TextView) itemView.findViewById(R.id.textlayout);
+            itemView.setOnCreateContextMenuListener(this);
         }
 
         @Override

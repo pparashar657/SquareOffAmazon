@@ -8,6 +8,7 @@
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -16,7 +17,8 @@
         android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Problem"></activity>
+        <activity android:name=".DetailActivity"></activity>
+        <activity android:name=".Problem" />
         <activity android:name=".ReceiveSummaryActivity" />
         <activity android:name=".ScanActivity" />
         <activity android:name=".UploadSummaryActivity" />

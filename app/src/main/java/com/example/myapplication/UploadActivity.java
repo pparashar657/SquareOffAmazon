@@ -3,14 +3,18 @@ package com.example.myapplication;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.Manifest;
 import android.content.ContentUris;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.media.MediaPlayer;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,18 +25,29 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.ArrayAdapter;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static android.view.View.GONE;
 
 public class UploadActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -48,6 +63,7 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
     MaterialButton home;
     TextInputEditText groupId;
     public static List<String> trId;
+    ConstraintLayout par;
     Intent intent;
 
     String transaction_type = "";
@@ -56,9 +72,12 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
     String shipment_type = "";
     String groupid = "";
 
+    Package pkg;
+
     public static final int Request_code_file = 10;
     public static final int Permission_Request = 0;
     int file_size = 0;
+    private FirebaseFirestore db;
 
 
     @Override
@@ -67,9 +86,13 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
         getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload);
+
+        db = FirebaseFirestore.getInstance();
+
         choose_file = (MaterialButton) findViewById(R.id.choose_file);
         scan_items = (MaterialButton) findViewById(R.id.scan_items);
         summary = (MaterialButton) findViewById(R.id.summary);
+        par = findViewById(R.id.upload_parent);
         home = (MaterialButton) findViewById(R.id.home);
         upload = (MaterialButton) findViewById(R.id.upload);
         groupId = (TextInputEditText) findViewById(R.id.newtrackingid);
@@ -167,7 +190,7 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
 
     private void summary() {
         if(trId.isEmpty()){
-            Snackbar.make(findViewById(R.id.upload_parent),"Nothing To Show ....",Snackbar.LENGTH_LONG).show();
+            Snackbar.make(par,"Nothing To Show ....",Snackbar.LENGTH_LONG).show();
         } else{
             intent = new Intent(this, UploadSummaryActivity.class);
             startActivity(intent);
@@ -184,43 +207,77 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
     private void upload() {
 
         if(trId.isEmpty()){
-            Snackbar.make(findViewById(R.id.upload_parent),"Nothing To Upload ....",Snackbar.LENGTH_LONG).show();
+            Snackbar.make(par,"Nothing To Upload ....",Snackbar.LENGTH_LONG).show();
         }else {
-            update();
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Success :) ");
-            builder.setMessage("Successfully Uploaded "+ trId.size() + " Records.");
-            builder.setPositiveButton("Upload Again", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Intent intent = new Intent(UploadActivity.this, UploadActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-            });
-            builder.setNeutralButton("Home", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Intent intent = new Intent(UploadActivity.this, HomeActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-            });
-            builder.setCancelable(false);
-            builder.create().show();
+            if(isNetworkAvailable()){
+                upload.setVisibility(GONE);
+                makedistinct();
+                update();
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("Success :) ");
+                builder.setMessage("Successfully Uploaded "+ trId.size() + " Records.");
+                builder.setPositiveButton("Upload Again", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(UploadActivity.this, UploadActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                });
+                builder.setNeutralButton("Home", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(UploadActivity.this, HomeActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                });
+                builder.setCancelable(false);
+                builder.create().show();
 
-            MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.success_sound);
-            mp.start();
+                MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.success_sound);
+                mp.start();
+            }else{
+                Snackbar.make(par,"No Connection available .....",Snackbar.LENGTH_LONG).show();
+            }
         }
 
 
     }
 
+    private void makedistinct() {
+
+        Collections.sort(trId);
+        for(int i=0;i<trId.size()-1;){
+            if(trId.get(i).equals(trId.get(i+1))){
+                trId.remove(i+1);
+            }else{
+                i++;
+            }
+        }
+    }
+
     private void update() {
 
+        CollectionReference dbItems = db.collection(Constants.CollectionName);
+        for(int i=0;i<trId.size();i++){
+            pkg = new Package(trId.get(i),
+                                source,
+                                destination,
+                                groupid,
+                                Constants.Intransit,
+                                Constants.PendingProcessing,
+                                transaction_type,
+                                shipment_type,
+                                destination,(System.currentTimeMillis()/1000));
 
-
-
+            dbItems.add(pkg).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Snackbar.make(par,e.getMessage(),Snackbar.LENGTH_LONG).show();
+                        }
+                    });
+        }
     }
 
     private boolean iscomplete() {
@@ -281,7 +338,9 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
     private void choosefile() {
         Intent i = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         i.addCategory(Intent.CATEGORY_OPENABLE);
+        String [] mimeTypes = {"text/csv", "text/comma-separated-values","text/plain","application/msword","application/vnd.openxmlformats-officedocument.wordprocessingml.document","application/vnd.ms-excel","application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"};
         i.setType("*/*");
+        i.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
         startActivityForResult(i,Request_code_file);
     }
 
@@ -372,13 +431,17 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
         }catch (Exception e){
             Log.e("main", " error is "+e.toString());
         }
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Records Added :");
-        builder.setMessage("Successfully Added "+file_size+" records.");
-        builder.setPositiveButton("Ok", null);
-        builder.create().show();
-        MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.success_sound);
-        mp.start();
+        if(file_size>0){
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Records Added :");
+            builder.setMessage("Successfully Added "+file_size+" records.");
+            builder.setPositiveButton("Ok", null);
+            builder.create().show();
+            MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.success_sound);
+            mp.start();
+        }else{
+            Snackbar.make(par,"Empty File ....",Snackbar.LENGTH_LONG).show();
+        }
 
     }
 
@@ -397,4 +460,10 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
         return  filepath;
     }
 
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
 }
