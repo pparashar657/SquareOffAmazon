@@ -11,9 +11,13 @@ public class Constants {
     public static final String Reconciled = "Reconciled";
     public static final String Missort = "Missort";
     public static final String NotInChallan = "NotInChallan";
-    public static final String CollectionName = "Packages";
+    public static final String PackageCollectionName = "Packages";
     public static final String Unknown = "Unknown";
     public static final String NotApplicable = "NotApplicable";
-
-
+    public static final String Type = "type";
+    public static final String Unreconciled = "unreconciled";
+    public static final String Extrareconciled = "extrareconciled";
+    public static final String TotalSent = "totalsent";
+    public static final String ProblemCollectionName = "ProblemSolveDetails";
+    public static final String Processed = "Processed";
 }

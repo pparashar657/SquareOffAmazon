@@ -1,6 +1,5 @@
 package com.example.myapplication;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -19,9 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -30,11 +27,9 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -83,7 +78,7 @@ public class ReceiveActivity extends AppCompatActivity implements View.OnClickLi
         parent = findViewById(R.id.receiveparent);
         db = FirebaseFirestore.getInstance();
         mypackages = new ArrayList<Package>();
-        packagesref = db.collection(Constants.CollectionName);
+        packagesref = db.collection(Constants.PackageCollectionName);
         trans_spinner = (Spinner) findViewById(R.id.trans_spinner);
         source_spinner = (Spinner) findViewById(R.id.source_spinner);
         dest_spinner = (Spinner) findViewById(R.id.destination_spinner);
@@ -464,7 +459,7 @@ public class ReceiveActivity extends AppCompatActivity implements View.OnClickLi
 
                                 if(p.getTargetNode().equals(target)){
 
-                                    packagesref.document(p.getId()).update("reconcilationState",Constants.NotInChallan,"lastUpdatedTime",(System.currentTimeMillis()/1000)).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    packagesref.document(p.getId()).update("reconcilationState",Constants.NotInChallan,"groupId",groupID,"lastUpdatedTime",(System.currentTimeMillis()/1000)).addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
                                             AlertDialog.Builder builder = new AlertDialog.Builder(ReceiveActivity.this);

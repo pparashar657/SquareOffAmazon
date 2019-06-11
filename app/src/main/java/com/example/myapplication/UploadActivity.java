@@ -25,17 +25,14 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.ArrayAdapter;
-import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.BufferedReader;
@@ -45,7 +42,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static android.view.View.GONE;
 
@@ -210,7 +206,6 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
             Snackbar.make(par,"Nothing To Upload ....",Snackbar.LENGTH_LONG).show();
         }else {
             if(isNetworkAvailable()){
-                upload.setVisibility(GONE);
                 makedistinct();
                 update();
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -259,7 +254,7 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
 
     private void update() {
 
-        CollectionReference dbItems = db.collection(Constants.CollectionName);
+        CollectionReference dbItems = db.collection(Constants.PackageCollectionName);
         for(int i=0;i<trId.size();i++){
             pkg = new Package(trId.get(i),
                                 source,

@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/primaryLightColor"
     android:layout_height="match_parent"
     tools:context=".DetailActivity">
@@ -16,7 +15,7 @@
         android:layout_height="?android:attr/actionBarSize"
         android:shadowColor="#000000"
         android:shadowDx="2"
-        android:background="@color/gray"
+        android:background="#8aacc8"
         android:shadowDy="2"
         android:shadowRadius="4"
         android:padding="4dp"
@@ -29,6 +28,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview"
+        android:layout_marginTop="8dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scrollbars="vertical"
