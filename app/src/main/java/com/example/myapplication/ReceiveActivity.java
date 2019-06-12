@@ -13,6 +13,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
@@ -50,7 +51,7 @@ public class ReceiveActivity extends AppCompatActivity implements View.OnClickLi
     static boolean isSCFC,ThreePSC,ThreePFC;
     TextInputEditText groupid,trackingid;
     public static String groupID="",target="",source="";
-    ProgressBar progress;
+    ProgressBar progress,progressreceive;
     Intent intent;
     static List<Package> mypackages;
 
@@ -65,6 +66,7 @@ public class ReceiveActivity extends AppCompatActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_receive);
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         initialize();
     }
 
@@ -83,6 +85,7 @@ public class ReceiveActivity extends AppCompatActivity implements View.OnClickLi
         source_spinner = (Spinner) findViewById(R.id.source_spinner);
         dest_spinner = (Spinner) findViewById(R.id.destination_spinner);
         progress = (ProgressBar) findViewById(R.id.progress);
+        progressreceive = (ProgressBar) findViewById(R.id.progressreceive);
         sourcetext = (TextView) findViewById(R.id.sourcetext);
         targettext = (TextView) findViewById(R.id.targettext);
         challanlayout = (ConstraintLayout) findViewById(R.id. challanlayout);
@@ -206,6 +209,7 @@ public class ReceiveActivity extends AppCompatActivity implements View.OnClickLi
             autogeneratebutton.setVisibility(View.GONE);
             submitcheck.setVisibility(View.GONE);
 
+
         }
 
     }
@@ -294,6 +298,8 @@ public class ReceiveActivity extends AppCompatActivity implements View.OnClickLi
                                 builder.setPositiveButton("Ok", null);
                                 builder.create().show();
                             }else{
+                                receive.setVisibility(View.INVISIBLE);
+                                progressreceive.setVisibility(View.VISIBLE);
                                 receive(trackingid.getText().toString());
                             }
                             break;
@@ -366,7 +372,7 @@ public class ReceiveActivity extends AppCompatActivity implements View.OnClickLi
         // Checks wheather the groupid and Target node have a valid entry.
         groupID = groupid.getText().toString();
         target = dest_spinner.getSelectedItem().toString();
-        packagesref.whereEqualTo("groupId",groupID).whereEqualTo("targetNode",target).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        packagesref.whereEqualTo("groupId",groupID).whereEqualTo("targetNode",target).whereEqualTo("transactionType",trans_spinner.getSelectedItem().toString()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 if(!queryDocumentSnapshots.isEmpty()){
@@ -421,9 +427,14 @@ public class ReceiveActivity extends AppCompatActivity implements View.OnClickLi
                             final AlertDialog dlg = builder.create();
                             dlg.show();
                             dlg.setCancelable(false);
+                            trackingid.setText("");
                             MediaPlayer mp = MediaPlayer.create(ReceiveActivity.this, R.raw.warning_sound);
                             mp.start();
                             packagesref.document(documentSnapshot.getId()).update("lastUpdatedTime",(System.currentTimeMillis()/1000));
+
+                            receive.setVisibility(View.VISIBLE);
+                            progressreceive.setVisibility(View.INVISIBLE);
+
                         }else {
 
                             packagesref.document(documentSnapshot.getId()).update("reconcilationState",Constants.Reconciled,"lastUpdatedTime",(System.currentTimeMillis()/1000));
@@ -432,6 +443,7 @@ public class ReceiveActivity extends AppCompatActivity implements View.OnClickLi
                             builder.setMessage("Package Reconciled... ");
                             final AlertDialog dlg = builder.create();
                             dlg.show();
+                            trackingid.setText("");
 
                             final Timer t = new Timer();
                             t.schedule(new TimerTask() {
@@ -443,6 +455,10 @@ public class ReceiveActivity extends AppCompatActivity implements View.OnClickLi
 
                             MediaPlayer mp = MediaPlayer.create(ReceiveActivity.this, R.raw.success_sound);
                             mp.start();
+
+
+                            receive.setVisibility(View.VISIBLE);
+                            progressreceive.setVisibility(View.INVISIBLE);
 
                         }
                     }
@@ -465,6 +481,7 @@ public class ReceiveActivity extends AppCompatActivity implements View.OnClickLi
                                             AlertDialog.Builder builder = new AlertDialog.Builder(ReceiveActivity.this);
                                             builder.setTitle("Error :");
                                             builder.setMessage("This Package is NOT IN CHALLAN ... ");
+                                            trackingid.setText("");
                                             final AlertDialog dlg = builder.create();
                                             dlg.show();
 
@@ -478,6 +495,10 @@ public class ReceiveActivity extends AppCompatActivity implements View.OnClickLi
 
                                             MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.warning_sound);
                                             mp.start();
+
+                                            receive.setVisibility(View.VISIBLE);
+                                            progressreceive.setVisibility(View.INVISIBLE);
+
                                         }
                                     });
 
@@ -487,7 +508,6 @@ public class ReceiveActivity extends AppCompatActivity implements View.OnClickLi
                                         public void onSuccess(Void aVoid) {
                                             AlertDialog.Builder builder = new AlertDialog.Builder(ReceiveActivity.this);
                                             builder.setTitle("Error :");
-                                            Log.e("Check","Found the id with matching different Target i.e. Missort");
                                             builder.setMessage("This Package is MISSORT ... ");
                                             final AlertDialog dlg = builder.create();
                                             dlg.show();
@@ -502,6 +522,10 @@ public class ReceiveActivity extends AppCompatActivity implements View.OnClickLi
 
                                             MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.warning_sound);
                                             mp.start();
+
+                                            receive.setVisibility(View.VISIBLE);
+                                            progressreceive.setVisibility(View.INVISIBLE);
+
                                         }
                                     });
                                 }
@@ -513,12 +537,13 @@ public class ReceiveActivity extends AppCompatActivity implements View.OnClickLi
                             builder.setPositiveButton("Yes, Accept", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    packagesref.add(new Package(pkgid,Constants.NotApplicable,target,groupID,Constants.Unknown,Constants.PendingProcessing,Constants.scfc,Constants.Unknown,target,(System.currentTimeMillis()/1000))).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                    packagesref.add(new Package(pkgid,Constants.Unknown,Constants.Unknown,groupID,Constants.Unknown,Constants.PendingProcessing,Constants.scfc,Constants.Unknown,target,(System.currentTimeMillis()/1000))).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                         @Override
                                         public void onSuccess(DocumentReference documentReference) {
                                             AlertDialog.Builder builder = new AlertDialog.Builder(ReceiveActivity.this);
                                             builder.setTitle("Error :");
                                             builder.setMessage("This Package is Unknown ... ");
+                                            trackingid.setText("");
                                             final AlertDialog dlg = builder.create();
                                             dlg.show();
 
@@ -532,6 +557,10 @@ public class ReceiveActivity extends AppCompatActivity implements View.OnClickLi
 
                                             MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.warning_sound);
                                             mp.start();
+
+                                            receive.setVisibility(View.VISIBLE);
+                                            progressreceive.setVisibility(View.INVISIBLE);
+
                                         }
                                     });
                                 }
@@ -556,6 +585,7 @@ public class ReceiveActivity extends AppCompatActivity implements View.OnClickLi
                     builder.setTitle("Success :");
                     builder.setMessage("Package Reconciled... ");
                     final AlertDialog dlg = builder.create();
+                    trackingid.setText("");
                     dlg.show();
 
                     final Timer t = new Timer();
@@ -568,6 +598,10 @@ public class ReceiveActivity extends AppCompatActivity implements View.OnClickLi
 
                     MediaPlayer mp = MediaPlayer.create(ReceiveActivity.this, R.raw.success_sound);
                     mp.start();
+
+                    receive.setVisibility(View.VISIBLE);
+                    progressreceive.setVisibility(View.INVISIBLE);
+
                 }
             });
 
@@ -585,6 +619,19 @@ public class ReceiveActivity extends AppCompatActivity implements View.OnClickLi
 
     private void submit() {
 
+        AlertDialog.Builder builder = new AlertDialog.Builder(ReceiveActivity.this);
+        builder.setTitle("Alert :");
+        builder.setMessage("Are you sure you want to Submit? ... ");
+        builder.setPositiveButton("Yes Submit", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startActivity(new Intent(ReceiveActivity.this,HomeActivity.class));
+                finish();
+            }
+        }).setNeutralButton("Cancel",null);
+        AlertDialog dlg = builder.create();
+        dlg.show();
+        dlg.setCancelable(false);
 
     }
 }

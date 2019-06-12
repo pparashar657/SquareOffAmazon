@@ -255,13 +255,12 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         if(!queryDocumentSnapshots.isEmpty()){
                             for(QueryDocumentSnapshot d:queryDocumentSnapshots){
-                                Log.e("Check","Found the id in DB");
                                 Package p = d.toObject(Package.class);
                                 p.setId(d.getId());
 
                                 if(p.getTargetNode().equals(ReceiveActivity.target)){
 
-                                    ReceiveActivity.packagesref.document(p.getId()).update("reconcilationState",Constants.NotInChallan,"lastUpdatedTime",(System.currentTimeMillis()/1000)).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    ReceiveActivity.packagesref.document(p.getId()).update("reconcilationState",Constants.NotInChallan,"groupId",ReceiveActivity.groupID,"lastUpdatedTime",(System.currentTimeMillis()/1000)).addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
                                             AlertDialog.Builder builder = new AlertDialog.Builder(ScanActivity.this);
@@ -325,7 +324,7 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
                             builder.setPositiveButton("Yes, Accept", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    ReceiveActivity.packagesref.add(new Package(pkgid,Constants.NotApplicable,ReceiveActivity.target,ReceiveActivity.groupID,Constants.Unknown,Constants.PendingProcessing,Constants.scfc,Constants.Unknown,ReceiveActivity.target,(System.currentTimeMillis()/1000))).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                    ReceiveActivity.packagesref.add(new Package(pkgid,Constants.Unknown,Constants.Unknown,ReceiveActivity.groupID,Constants.Unknown,Constants.PendingProcessing,Constants.scfc,Constants.Unknown,ReceiveActivity.target,(System.currentTimeMillis()/1000))).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                         @Override
                                         public void onSuccess(DocumentReference documentReference) {
                                             AlertDialog.Builder builder = new AlertDialog.Builder(ScanActivity.this);

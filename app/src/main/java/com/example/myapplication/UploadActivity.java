@@ -24,6 +24,7 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -82,6 +83,7 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
         getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload);
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         db = FirebaseFirestore.getInstance();
 

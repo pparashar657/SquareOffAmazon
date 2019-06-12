@@ -1,9 +1,12 @@
 package com.example.myapplication;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -16,6 +19,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class ReceiveSummaryActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -61,18 +66,38 @@ public class ReceiveSummaryActivity extends AppCompatActivity implements View.On
 
         db = FirebaseFirestore.getInstance();
         packagesref = db.collection(Constants.PackageCollectionName);
-        packagesref.whereEqualTo("groupId",ReceiveActivity.groupID).whereEqualTo("targetNode",ReceiveActivity.target).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        packagesref.whereEqualTo("groupId",ReceiveActivity.groupID).whereEqualTo("currentNode",ReceiveActivity.target).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                for(QueryDocumentSnapshot d:queryDocumentSnapshots){
-                    Package p = d.toObject(Package.class);
-                    p.setId(d.getId());
-                    totallist.add(p);
+                if(!queryDocumentSnapshots.isEmpty()){
+                    for(QueryDocumentSnapshot d:queryDocumentSnapshots){
+                        Package p = d.toObject(Package.class);
+                        p.setId(d.getId());
+                        totallist.add(p);
+                    }
+                    findViewById(R.id.cardView).setVisibility(View.VISIBLE);
+                    findViewById(R.id.container).setVisibility(View.VISIBLE);
+                    findViewById(R.id.progress).setVisibility(View.GONE);
+                    initialize();
+                }else{
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(ReceiveSummaryActivity.this);
+                    builder.setTitle("Error :");
+                    builder.setMessage("Nothing to Show ... ");
+                    builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();
+                        }
+                    });
+                    final AlertDialog dlg = builder.create();
+                    dlg.show();
+                    dlg.setCancelable(false);
+                    MediaPlayer mp = MediaPlayer.create(ReceiveSummaryActivity.this, R.raw.warning_sound);
+                    mp.start();
+                    findViewById(R.id.progress).setVisibility(View.GONE);
+
                 }
-                findViewById(R.id.cardView).setVisibility(View.VISIBLE);
-                findViewById(R.id.container).setVisibility(View.VISIBLE);
-                findViewById(R.id.progress).setVisibility(View.GONE);
-                initialize();
             }
         });
     }
@@ -85,12 +110,17 @@ public class ReceiveSummaryActivity extends AppCompatActivity implements View.On
 
         getList();
 
-        totalcount.setText("( "+totalnum+" )");
+        if(ReceiveActivity.isSCFC){
+            totalcount.setText("( "+totalnum+" )");
+            total.setOnClickListener(this);
+        }else {
+            totalcount.setText("( - )");
+        }
+
         reconciledcount.setText("( "+reconcilednum+" )");
         unreconciledcount.setText("( "+unreconcilednum+" )");
         extracount.setText("( "+extranum+" )");
 
-        total.setOnClickListener(this);
         reconciled.setOnClickListener(this);
         unreconciled.setOnClickListener(this);
         extra.setOnClickListener(this);
