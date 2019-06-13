@@ -20,4 +20,7 @@ public class Constants {
     public static final String TotalSent = "totalsent";
     public static final String ProblemCollectionName = "ProblemSolveDetails";
     public static final String Processed = "Processed";
+    public static final String ShipmentType = "Type ..";
+    public static final String Regular = "Regular";
+    public static final String Damaged = "Damaged";
 }

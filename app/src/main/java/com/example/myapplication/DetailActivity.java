@@ -26,13 +26,14 @@ public class DetailActivity extends AppCompatActivity {
 
 
         head = findViewById(R.id.head);
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
+
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerview1);
+
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         init();
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
-
     }
 
     private void init() {

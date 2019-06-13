@@ -73,16 +73,14 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="0dp"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
                 android:layout_marginEnd="16dp"
                 android:hint="Tracking ID"
                 android:textColorHint="@color/black"
                 app:boxStrokeColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/trackingtext"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -125,23 +123,21 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="0dp"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
                 android:layout_marginEnd="16dp"
                 android:hint="XOO/BOO/LPN"
                 android:textColorHint="@color/black"
                 app:boxStrokeColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/xootext"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/lpn"
                     android:layout_width="match_parent"
-                    android:imeOptions="actionGo"
                     android:layout_height="wrap_content"
+                    android:imeOptions="actionGo"
                     android:textColor="@color/black" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -179,23 +175,21 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="0dp"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
                 android:layout_marginEnd="16dp"
                 android:hint="Item Quantity "
                 android:textColorHint="@color/black"
                 app:boxStrokeColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/quantitytext"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/quantity"
                     android:layout_width="match_parent"
-                    android:imeOptions="actionNext"
                     android:layout_height="wrap_content"
+                    android:imeOptions="actionNext"
                     android:textColor="@color/black" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -233,16 +227,14 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="0dp"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
                 android:layout_marginEnd="16dp"
                 android:hint="Associated Ticket"
                 android:textColorHint="@color/black"
                 app:boxStrokeColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/tickettext"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -286,13 +278,11 @@
 
             <fr.ganfra.materialspinner.MaterialSpinner
                 android:id="@+id/process_spinner"
-                android:layout_width="0dp"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 app:layout_constraintBottom_toBottomOf="@id/processedtext"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/processedtext"
                 app:layout_constraintTop_toTopOf="@id/processedtext"
                 app:ms_arrowSize="16dp"
                 app:ms_baseColor="@color/black" />
@@ -331,13 +321,11 @@
 
             <fr.ganfra.materialspinner.MaterialSpinner
                 android:id="@+id/marked_spinner"
-                android:layout_width="0dp"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 app:layout_constraintBottom_toBottomOf="@id/markedtext"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/markedtext"
                 app:layout_constraintTop_toTopOf="@id/markedtext"
                 app:ms_arrowSize="16dp"
                 app:ms_baseColor="@color/black" />
@@ -376,16 +364,14 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="0dp"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
                 android:layout_marginEnd="16dp"
                 android:hint="New Tracking ID "
                 android:textColorHint="@color/black"
                 app:boxStrokeColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/newtrackingtext"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -430,16 +416,14 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="0dp"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
                 android:layout_marginEnd="16dp"
                 android:hint="Comments"
                 android:textColorHint="@color/black"
                 app:boxStrokeColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/commenttext"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -466,7 +450,7 @@
             android:id="@+id/materialButton2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="32dp"
             android:layout_marginBottom="16dp"
             android:backgroundTint="@color/green"
             android:text="Submit"
@@ -476,23 +460,23 @@
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout11" />
 
         <ProgressBar
-            app:layout_constraintBottom_toBottomOf="parent"
             android:id="@+id/progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="16dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="16dp"
-            android:visibility="gone"
-            android:layout_marginBottom="16dp"
-            app:layout_constraintTop_toBottomOf="@+id/constraintLayout11"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout11" />
 
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/camera"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="32dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="16dp"
             android:backgroundTint="@color/whitesmoke"

@@ -14,9 +14,9 @@ import java.util.List;
 public class SummaryRecyclerAdapter extends RecyclerView.Adapter<SummaryRecyclerAdapter.MyViewHolder> {
 
 
-    private List<String> list;
+    private List<Package> list;
 
-    public SummaryRecyclerAdapter(List<String> list){
+    public SummaryRecyclerAdapter(List<Package> list){
         this.list = list;
     }
 
@@ -30,8 +30,13 @@ public class SummaryRecyclerAdapter extends RecyclerView.Adapter<SummaryRecycler
 
     @Override
     public void onBindViewHolder(SummaryRecyclerAdapter.MyViewHolder holder, int position) {
-        final String temp = list.get(position);
-        holder.packageId.setText(list.get(position));
+        final Package temp = list.get(position);
+
+        if(ReceiveActivity.isSCFC){
+            holder.packageId.setText(temp.getTrackingId());
+        }else{
+            holder.packageId.setText(temp.getTrackingId() + "   ( "+temp.getShipmenttype()+" )");
+        }
     }
 
     @Override

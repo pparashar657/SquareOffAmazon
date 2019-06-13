@@ -3,6 +3,8 @@ package com.example.myapplication;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,6 +19,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -26,13 +30,18 @@ public class ReceiveSummaryActivity extends AppCompatActivity implements View.On
 
 
     private FirebaseFirestore db;
+    private RecyclerView.LayoutManager layoutManager;
+    private SummaryRecyclerAdapter adapter;
+
     CollectionReference packagesref;
     static List<Package> totallist;
-    static List<String> totalliststring,reconciledlist,unreconciledlist,extralist;
+    static List<Package> totalliststring,reconciledlist,unreconciledlist,extralist;
     CardView total,reconciled,unreconciled,extra;
     TextView source,target,challan,totalcount,reconciledcount,unreconciledcount,extracount;
     int totalnum=0,reconcilednum=0,unreconcilednum=0,extranum=0;
     String sourcestring;
+    TextView texthead;
+    RecyclerView recycler;
 
     Intent intent;
 
@@ -40,6 +49,9 @@ public class ReceiveSummaryActivity extends AppCompatActivity implements View.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_receive_summary);
+
+        texthead = (TextView) findViewById(R.id.texthead);
+        recycler = (RecyclerView) findViewById(R.id.recyclercontainer);
 
 
         source = findViewById(R.id.sourcedetail);
@@ -57,10 +69,10 @@ public class ReceiveSummaryActivity extends AppCompatActivity implements View.On
         extracount = findViewById(R.id.extrareconciledcount);
 
         totallist = new ArrayList<Package>();
-        totalliststring = new ArrayList<String>();
-        reconciledlist = new ArrayList<String>();
-        unreconciledlist = new ArrayList<String>();
-        extralist = new ArrayList<String>();
+        totalliststring = new ArrayList<Package>();
+        reconciledlist = new ArrayList<Package>();
+        unreconciledlist = new ArrayList<Package>();
+        extralist = new ArrayList<Package>();
 
 
 
@@ -76,8 +88,8 @@ public class ReceiveSummaryActivity extends AppCompatActivity implements View.On
                         totallist.add(p);
                     }
                     findViewById(R.id.cardView).setVisibility(View.VISIBLE);
-                    findViewById(R.id.container).setVisibility(View.VISIBLE);
                     findViewById(R.id.progress).setVisibility(View.GONE);
+
                     initialize();
                 }else{
 
@@ -111,20 +123,31 @@ public class ReceiveSummaryActivity extends AppCompatActivity implements View.On
         getList();
 
         if(ReceiveActivity.isSCFC){
+
+            total.setVisibility(View.VISIBLE);
+            reconciled.setVisibility(View.VISIBLE);
+            unreconciled.setVisibility(View.VISIBLE);
+            extra.setVisibility(View.VISIBLE);
+
             totalcount.setText("( "+totalnum+" )");
             total.setOnClickListener(this);
+            reconciledcount.setText("( "+reconcilednum+" )");
+            unreconciledcount.setText("( "+unreconcilednum+" )");
+            extracount.setText("( "+extranum+" )");
+            reconciled.setOnClickListener(this);
+            unreconciled.setOnClickListener(this);
+            extra.setOnClickListener(this);
+
         }else {
-            totalcount.setText("( - )");
+            texthead.setVisibility(View.VISIBLE);
+            recycler.setVisibility(View.VISIBLE);
+
+            layoutManager = new LinearLayoutManager(this);
+            recycler.setLayoutManager(layoutManager);
+            adapter = new SummaryRecyclerAdapter(reconciledlist);
+            recycler.setAdapter(adapter);
+            recycler.setHasFixedSize(true);
         }
-
-        reconciledcount.setText("( "+reconcilednum+" )");
-        unreconciledcount.setText("( "+unreconcilednum+" )");
-        extracount.setText("( "+extranum+" )");
-
-        reconciled.setOnClickListener(this);
-        unreconciled.setOnClickListener(this);
-        extra.setOnClickListener(this);
-
 
     }
 
@@ -132,16 +155,15 @@ public class ReceiveSummaryActivity extends AppCompatActivity implements View.On
 
         for(Package p:totallist){
 
-
-            if(p.getSourceNode().equals(sourcestring)){
-                totalliststring.add(p.getTrackingId());
+            if(p.getReconcilationState().equals(Constants.Reconciled) || p.getReconcilationState().equals(Constants.Intransit)){
+                totalliststring.add(p);
             }
             if(p.getReconcilationState().equals(Constants.Reconciled)){
-                reconciledlist.add(p.getTrackingId());
+                reconciledlist.add(p);
             }else if(p.getReconcilationState().equals(Constants.Intransit)){
-                unreconciledlist.add(p.getTrackingId());
+                unreconciledlist.add(p);
             }else{
-                extralist.add(p.getTrackingId());
+                extralist.add(p);
             }
         }
 

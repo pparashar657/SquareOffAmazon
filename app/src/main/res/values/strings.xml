@@ -167,6 +167,12 @@
         <item>True Orphan</item>
     </string-array>
 
+    <string-array name="shipmentTypeReceive">
+        <item>Type ..</item>
+        <item>Regular</item>
+        <item>Damaged</item>
+    </string-array>
+
     <string-array name="menu">
         <item>Delete</item>
     </string-array>
