@@ -11,7 +11,7 @@
         android:id="@+id/constraintLayout3"
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"
-        android:background="#827717"
+        android:background="@color/secondaryDarkColor"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -36,12 +36,12 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            android:shadowColor="#ffffff"
+            android:shadowColor="#000000"
             android:shadowDx="2"
             android:shadowDy="2"
             android:shadowRadius="4"
             android:text="Problem Solve"
-            android:textColor="#000000"
+            android:textColor="#ffffff"
             android:textSize="30dp"
             android:textStyle="bold"
             android:transitionName="transitiontext"
@@ -66,7 +66,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="128dp"
-            app:cardBackgroundColor="@color/wheat"
+            app:cardBackgroundColor="#e8e8e8"
             app:cardCornerRadius="20dp"
             app:cardElevation="8dp"
             android:background="@drawable/ripple_effect"
@@ -92,9 +92,9 @@
                     android:shadowDy="2"
                     android:shadowRadius="4"
                     android:text="Package has a "
-                    android:textColor="#5c4200"
+                    android:textColor="#000000"
                     android:textSize="20dp"
-                    android:textStyle="bold|italic" />
+                    android:textStyle="bold" />
 
 
                 <TextView
@@ -106,9 +106,9 @@
                     android:shadowDy="2"
                     android:shadowRadius="4"
                     android:text=" Tracking ID."
-                    android:textColor="#5c4200"
+                    android:textColor="#000000"
                     android:textSize="20dp"
-                    android:textStyle="bold|italic" />
+                    android:textStyle="bold" />
 
             </LinearLayout>
 
@@ -120,7 +120,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="128dp"
             android:background="@drawable/ripple_effect"
-            app:cardBackgroundColor="@color/wheat"
+            app:cardBackgroundColor="#e8e8e8"
             app:cardCornerRadius="20dp"
             app:cardElevation="8dp"
             app:cardUseCompatPadding="true"
@@ -145,9 +145,9 @@
                     android:shadowDy="2"
                     android:shadowRadius="4"
                     android:text="Package doesn't have a "
-                    android:textColor="#5c4200"
+                    android:textColor="#000000"
                     android:textSize="20dp"
-                    android:textStyle="bold|italic" />
+                    android:textStyle="bold" />
 
 
                 <TextView
@@ -159,9 +159,9 @@
                     android:shadowDy="2"
                     android:shadowRadius="4"
                     android:text=" Tracking ID."
-                    android:textColor="#5c4200"
+                    android:textColor="#000000"
                     android:textSize="20dp"
-                    android:textStyle="bold|italic" />
+                    android:textStyle="bold" />
 
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>

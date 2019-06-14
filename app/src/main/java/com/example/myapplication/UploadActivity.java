@@ -108,17 +108,25 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onBackPressed() {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Alert :");
-        builder.setMessage("Are you sure, you want to exit? ");
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                UploadActivity.super.onBackPressed();
-            }
-        });
-        builder.setNeutralButton("Cancel",null);
-        builder.create().show();
+        if(trans_spinner.getSelectedItem().toString().equals(Constants.choose)){
+
+            UploadActivity.super.onBackPressed();
+
+        }else{
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Alert :");
+            builder.setMessage("Are you sure, you want to exit? ");
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    UploadActivity.super.onBackPressed();
+                }
+            });
+            builder.setNeutralButton("Cancel",null);
+            builder.create().show();
+
+        }
     }
 
     private void setAdapter() {

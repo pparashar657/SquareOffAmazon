@@ -12,7 +12,7 @@
         android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"
-        android:background="@color/gray"
+        android:background="@color/secondaryDarkColor"
         android:padding="4dp"
         android:shadowColor="#000000"
         android:shadowDx="2"
@@ -32,8 +32,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:backgroundTint="@color/wheat"
-        app:cardCornerRadius="20dp"
+        android:backgroundTint="@color/secondaryLightColor"
+        app:cardCornerRadius="10dp"
         app:cardElevation="8dp"
         android:visibility="invisible"
         app:cardUseCompatPadding="true"
@@ -54,12 +54,12 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/ripple_effect"
                 android:padding="8dp"
-                android:shadowColor="#ffffff"
+                android:shadowColor="#000000"
                 android:shadowDx="2"
                 android:shadowDy="2"
                 android:shadowRadius="4"
                 android:text="Source"
-                android:textColor="#5c4200"
+                android:textColor="@color/white"
                 android:textSize="16dp"
                 android:textStyle="bold" />
 
@@ -70,12 +70,12 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/ripple_effect"
                 android:padding="8dp"
-                android:shadowColor="#ffffff"
+                android:shadowColor="#000000"
                 android:shadowDx="2"
                 android:shadowDy="2"
                 android:shadowRadius="4"
                 android:text="Target"
-                android:textColor="#5c4200"
+                android:textColor="@color/white"
                 android:textSize="16dp"
                 android:textStyle="bold" />
 
@@ -86,12 +86,12 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/ripple_effect"
                 android:padding="8dp"
-                android:shadowColor="#ffffff"
+                android:shadowColor="#000000"
                 android:shadowDx="2"
                 android:shadowDy="2"
                 android:shadowRadius="4"
                 android:text="Challan No"
-                android:textColor="#5c4200"
+                android:textColor="@color/white"
                 android:textSize="16dp"
                 android:textStyle="bold" />
 
@@ -113,23 +113,20 @@
         app:layout_constraintTop_toBottomOf="@+id/cardView">
 
 
-        <EditText
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:id="@+id/texthead"
-            android:shadowColor="#ffffff"
-            android:background="#8aacc8"
-            android:shadowDx="2"
+            android:background="@color/primaryDarkColor"
             android:visibility="invisible"
-            android:shadowDy="2"
+            android:textSize="20dp"
             android:textStyle="bold"
-            android:shadowRadius="4"
             android:text="Tracking Id"
             android:padding="8dp"
-            android:textColor="#000000"
+            android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -151,7 +148,7 @@
             android:layout_height="0dp"
             app:layout_constraintBottom_toTopOf="@+id/unreconciled"
             app:layout_constraintEnd_toStartOf="@+id/reconciled"
-            android:backgroundTint="@color/wheat"
+            android:backgroundTint="#e8e8e8"
             app:cardCornerRadius="20dp"
             app:cardElevation="2dp"
             android:visibility="invisible"
@@ -176,7 +173,7 @@
                     android:shadowRadius="4"
                     android:text="Total Sent"
                     android:layout_gravity="center"
-                    android:textColor="#5c4200"
+                    android:textColor="@color/black"
                     android:textSize="20dp"
                     android:textStyle="bold" />
 
@@ -191,7 +188,7 @@
                     android:shadowRadius="4"
                     android:text="()"
                     android:layout_gravity="center"
-                    android:textColor="#5c4200"
+                    android:textColor="@color/black"
                     android:textSize="20dp"
                     android:textStyle="bold" />
 
@@ -206,7 +203,7 @@
             app:layout_constraintBottom_toTopOf="@+id/extrareconciled"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/totalsent"
-            android:backgroundTint="@color/wheat"
+            android:backgroundTint="#e8e8e8"
             app:cardCornerRadius="20dp"
             app:cardElevation="2dp"
             android:visibility="invisible"
@@ -231,7 +228,7 @@
                     android:shadowRadius="4"
                     android:text="Reconciled"
                     android:layout_gravity="center"
-                    android:textColor="#5c4200"
+                    android:textColor="@color/black"
                     android:textSize="20dp"
                     android:textStyle="bold" />
 
@@ -246,7 +243,7 @@
                     android:shadowRadius="4"
                     android:text="()"
                     android:layout_gravity="center"
-                    android:textColor="#5c4200"
+                    android:textColor="@color/black"
                     android:textSize="20dp"
                     android:textStyle="bold" />
 
@@ -261,7 +258,7 @@
             app:layout_constraintTop_toBottomOf="@+id/totalsent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/extrareconciled"
-            android:backgroundTint="@color/wheat"
+            android:backgroundTint="#e8e8e8"
             android:visibility="invisible"
             app:cardCornerRadius="20dp"
             app:cardElevation="2dp"
@@ -286,7 +283,7 @@
                     android:shadowRadius="4"
                     android:text="Unreconciled"
                     android:layout_gravity="center"
-                    android:textColor="#5c4200"
+                    android:textColor="@color/black"
                     android:textSize="20dp"
                     android:textStyle="bold" />
 
@@ -302,7 +299,7 @@
                     android:shadowRadius="4"
                     android:text="()"
                     android:layout_gravity="center"
-                    android:textColor="#5c4200"
+                    android:textColor="@color/black"
                     android:textSize="20dp"
                     android:textStyle="bold" />
 
@@ -316,7 +313,7 @@
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/unreconciled"
-            android:backgroundTint="@color/wheat"
+            android:backgroundTint="#e8e8e8"
             app:cardCornerRadius="20dp"
             android:visibility="invisible"
             app:cardElevation="2dp"
@@ -342,7 +339,7 @@
                     android:shadowRadius="4"
                     android:text="Extra Reconciled"
                     android:layout_gravity="center"
-                    android:textColor="#5c4200"
+                    android:textColor="@color/black"
                     android:textSize="20dp"
                     android:textStyle="bold" />
 
@@ -357,7 +354,7 @@
                     android:shadowRadius="4"
                     android:text="()"
                     android:layout_gravity="center"
-                    android:textColor="#5c4200"
+                    android:textColor="@color/black"
                     android:textSize="20dp"
                     android:textStyle="bold" />
 

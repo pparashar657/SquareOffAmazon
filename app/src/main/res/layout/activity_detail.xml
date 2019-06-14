@@ -15,7 +15,7 @@
         android:layout_height="?android:attr/actionBarSize"
         android:shadowColor="#000000"
         android:shadowDx="2"
-        android:background="#8aacc8"
+        android:background="@color/secondaryDarkColor"
         android:shadowDy="2"
         android:shadowRadius="4"
         android:padding="4dp"

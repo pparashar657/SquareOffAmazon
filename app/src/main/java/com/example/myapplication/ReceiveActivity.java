@@ -481,17 +481,11 @@ public class ReceiveActivity extends AppCompatActivity implements View.OnClickLi
                             AlertDialog.Builder builder = new AlertDialog.Builder(ReceiveActivity.this);
                             builder.setTitle("Success :");
                             builder.setMessage("Package Reconciled... ");
+                            builder.setPositiveButton("Ok",null);
                             final AlertDialog dlg = builder.create();
                             dlg.show();
+                            dlg.setCancelable(false);
                             trackingid.setText("");
-
-                            final Timer t = new Timer();
-                            t.schedule(new TimerTask() {
-                                public void run() {
-                                    dlg.dismiss();
-                                    t.cancel();
-                                }
-                            }, 2000);
 
                             MediaPlayer mp = MediaPlayer.create(ReceiveActivity.this, R.raw.success_sound);
                             mp.start();
@@ -511,93 +505,95 @@ public class ReceiveActivity extends AppCompatActivity implements View.OnClickLi
 
                         if(!queryDocumentSnapshots.isEmpty()){
 
-                            for(QueryDocumentSnapshot d:queryDocumentSnapshots){
+                            List<Package> list = new ArrayList<Package>();
+
+                            for(QueryDocumentSnapshot d:queryDocumentSnapshots) {
 
                                 Package p = d.toObject(Package.class);
                                 p.setId(d.getId());
+                                list.add(p);
 
-                                if(p.getGroupId().equals(groupID) && !(p.getReconcilationState().equals(Constants.Intransit))){
+                            }
+                            boolean done = false;
 
-                                    AlertDialog.Builder builder = new AlertDialog.Builder(ReceiveActivity.this);
-                                    builder.setTitle("ERROR :");
-                                    builder.setMessage("Duplicate Package Received ... ");
-                                    builder.setPositiveButton("Ok",null);
-                                    final AlertDialog dlg = builder.create();
-                                    dlg.show();
-                                    dlg.setCancelable(false);
-                                    trackingid.setText("");
-                                    MediaPlayer mp = MediaPlayer.create(ReceiveActivity.this, R.raw.warning_sound);
-                                    mp.start();
-                                    packagesref.document(p.getId()).update("lastUpdatedTime",(System.currentTimeMillis()/1000));
+                            Package.sortByTime(list);
 
-                                    receive.setVisibility(View.VISIBLE);
-                                    progressreceive.setVisibility(View.INVISIBLE);
+                            for(Package p:list){
 
+                                if(!done){
 
-                                }else{
+                                    if(p.getGroupId().equals(groupID) && !(p.getReconcilationState().equals(Constants.Intransit))){
 
+                                        done = true;
 
-                                    if(p.getTargetNode().equals(target)){
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(ReceiveActivity.this);
+                                        builder.setTitle("ERROR :");
+                                        builder.setMessage("Duplicate Package Received ... ");
+                                        builder.setPositiveButton("Ok",null);
+                                        final AlertDialog dlg = builder.create();
+                                        dlg.show();
+                                        dlg.setCancelable(false);
+                                        trackingid.setText("");
+                                        MediaPlayer mp = MediaPlayer.create(ReceiveActivity.this, R.raw.warning_sound);
+                                        mp.start();
+                                        packagesref.document(p.getId()).update("lastUpdatedTime",(System.currentTimeMillis()/1000));
 
-                                        Package p1 = new Package(pkgid,p.getSourceNode(),p.getTargetNode(),groupID,Constants.NotInChallan,Constants.PendingProcessing,Constants.scfc,p.getShipmenttype(),target,(System.currentTimeMillis()/1000));
-                                        packagesref.add(p1).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                            @Override
-                                            public void onSuccess(DocumentReference documentReference) {
-                                                AlertDialog.Builder builder = new AlertDialog.Builder(ReceiveActivity.this);
-                                                builder.setTitle("Error :");
-                                                builder.setMessage("This Package is NOT IN CHALLAN ... ");
-                                                trackingid.setText("");
-                                                final AlertDialog dlg = builder.create();
-                                                dlg.show();
-
-                                                final Timer t = new Timer();
-                                                t.schedule(new TimerTask() {
-                                                    public void run() {
-                                                        dlg.dismiss();
-                                                        t.cancel();
-                                                    }
-                                                }, 2000);
-
-                                                MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.warning_sound);
-                                                mp.start();
-
-                                                receive.setVisibility(View.VISIBLE);
-                                                progressreceive.setVisibility(View.INVISIBLE);                                            }
-
-                                        });
+                                        receive.setVisibility(View.VISIBLE);
+                                        progressreceive.setVisibility(View.INVISIBLE);
 
                                     }else{
 
-                                        Package p1 = new Package(pkgid,p.getSourceNode(),p.getTargetNode(),groupID,Constants.Missort,Constants.PendingProcessing,Constants.scfc,p.getShipmenttype(),target,(System.currentTimeMillis()/1000));
-                                        packagesref.add(p1).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                            @Override
-                                            public void onSuccess(DocumentReference documentReference) {
-                                                AlertDialog.Builder builder = new AlertDialog.Builder(ReceiveActivity.this);
-                                                builder.setTitle("Error :");
-                                                builder.setMessage("This Package is MISSORT ... ");
-                                                final AlertDialog dlg = builder.create();
-                                                dlg.show();
 
-                                                final Timer t = new Timer();
-                                                t.schedule(new TimerTask() {
-                                                    public void run() {
-                                                        dlg.dismiss();
-                                                        t.cancel();
-                                                    }
-                                                }, 2000);
+                                        if(p.getTargetNode().equals(target)){
 
-                                                MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.warning_sound);
-                                                mp.start();
+                                            Package p1 = new Package(pkgid,p.getSourceNode(),p.getTargetNode(),groupID,Constants.NotInChallan,Constants.PendingProcessing,Constants.scfc,p.getShipmenttype(),target,(System.currentTimeMillis()/1000));
+                                            packagesref.add(p1).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                                @Override
+                                                public void onSuccess(DocumentReference documentReference) {
+                                                    AlertDialog.Builder builder = new AlertDialog.Builder(ReceiveActivity.this);
+                                                    builder.setTitle("Error :");
+                                                    builder.setMessage("This Package is NOT IN CHALLAN ... ");
+                                                    builder.setPositiveButton("Ok",null);
+                                                    final AlertDialog dlg = builder.create();
+                                                    dlg.show();
+                                                    dlg.setCancelable(false);
 
-                                                receive.setVisibility(View.VISIBLE);
-                                                progressreceive.setVisibility(View.INVISIBLE);
-                                            }
-                                        });
+                                                    MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.warning_sound);
+                                                    mp.start();
+                                                    trackingid.setText("");
+
+                                                    receive.setVisibility(View.VISIBLE);
+                                                    progressreceive.setVisibility(View.INVISIBLE);                                            }
+
+                                            });
+
+                                        }else{
+
+                                            Package p1 = new Package(pkgid,p.getSourceNode(),p.getTargetNode(),groupID,Constants.Missort,Constants.PendingProcessing,Constants.scfc,p.getShipmenttype(),target,(System.currentTimeMillis()/1000));
+                                            packagesref.add(p1).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                                @Override
+                                                public void onSuccess(DocumentReference documentReference) {
+                                                    AlertDialog.Builder builder = new AlertDialog.Builder(ReceiveActivity.this);
+                                                    builder.setTitle("Error :");
+                                                    builder.setMessage("This Package is MISSORT ... ");
+                                                    builder.setPositiveButton("Ok",null);
+                                                    final AlertDialog dlg = builder.create();
+                                                    dlg.show();
+                                                    dlg.setCancelable(false);
+
+                                                    MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.warning_sound);
+                                                    mp.start();
+                                                    trackingid.setText("");
+                                                    receive.setVisibility(View.VISIBLE);
+                                                    progressreceive.setVisibility(View.INVISIBLE);
+                                                }
+                                            });
+
+                                        }
 
                                     }
 
                                 }
-
 
                             }
 
@@ -615,20 +611,14 @@ public class ReceiveActivity extends AppCompatActivity implements View.OnClickLi
                                             AlertDialog.Builder builder = new AlertDialog.Builder(ReceiveActivity.this);
                                             builder.setTitle("Error :");
                                             builder.setMessage("This Package is Unknown ... ");
-                                            trackingid.setText("");
+                                            builder.setPositiveButton("Ok",null);
                                             final AlertDialog dlg = builder.create();
                                             dlg.show();
-
-                                            final Timer t = new Timer();
-                                            t.schedule(new TimerTask() {
-                                                public void run() {
-                                                    dlg.dismiss();
-                                                    t.cancel();
-                                                }
-                                            }, 2000);
+                                            dlg.setCancelable(false);
 
                                             MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.warning_sound);
                                             mp.start();
+                                            trackingid.setText("");
 
                                         }
                                     });
@@ -649,7 +639,7 @@ public class ReceiveActivity extends AppCompatActivity implements View.OnClickLi
             }
         }else{
 
-            packagesref.whereEqualTo("trackingId",pkgid).whereEqualTo("targetNode",target).whereEqualTo("groupId",groupID).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            packagesref.whereEqualTo("trackingId",pkgid).whereEqualTo("targetNode",target).whereEqualTo("groupId",groupID).whereEqualTo("transactionType",trans_spinner.getSelectedItem().toString()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
 
                 @Override
                 public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -674,7 +664,14 @@ public class ReceiveActivity extends AppCompatActivity implements View.OnClickLi
                                 MediaPlayer mp = MediaPlayer.create(ReceiveActivity.this, R.raw.warning_sound);
                                 mp.start();
                                 packagesref.document(p.getId()).update("lastUpdatedTime",(System.currentTimeMillis()/1000));
+                                trackingid.setText("");
 
+                                receive.setVisibility(View.VISIBLE);
+                                progressreceive.setVisibility(View.INVISIBLE);
+
+                            }else{
+                                Snackbar.make(parent,"Something Went Wrong ...",Snackbar.LENGTH_LONG).show();
+                                trackingid.setText("");
                                 receive.setVisibility(View.VISIBLE);
                                 progressreceive.setVisibility(View.INVISIBLE);
 
@@ -704,6 +701,7 @@ public class ReceiveActivity extends AppCompatActivity implements View.OnClickLi
 
                                 MediaPlayer mp = MediaPlayer.create(ReceiveActivity.this, R.raw.success_sound);
                                 mp.start();
+                                trackingid.setText("");
 
                                 receive.setVisibility(View.VISIBLE);
                                 progressreceive.setVisibility(View.INVISIBLE);

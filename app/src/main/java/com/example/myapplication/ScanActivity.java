@@ -27,6 +27,8 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.zxing.Result;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -265,97 +267,114 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
 
                         if(!queryDocumentSnapshots.isEmpty()){
 
-                            for(QueryDocumentSnapshot d:queryDocumentSnapshots){
+                            List<Package> list = new ArrayList<Package>();
+
+                            for(QueryDocumentSnapshot d:queryDocumentSnapshots) {
 
                                 Package p = d.toObject(Package.class);
                                 p.setId(d.getId());
+                                list.add(p);
 
+                            }
 
-                                if(p.getGroupId().equals(ReceiveActivity.groupID) && !(p.getReconcilationState().equals(Constants.Intransit))){
+                            boolean done = false;
 
-                                    AlertDialog.Builder builder = new AlertDialog.Builder(ScanActivity.this);
-                                    builder.setTitle("ERROR :");
-                                    builder.setMessage("Duplicate Package Received ... ");
-                                    builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            scannerView.startCamera();
-                                            scannerView.resumeCameraPreview(ScanActivity.this);
-                                        }
-                                    });
-                                    final AlertDialog dlg = builder.create();
-                                    dlg.show();
-                                    dlg.setCancelable(false);
-                                    MediaPlayer mp = MediaPlayer.create(ScanActivity.this, R.raw.warning_sound);
-                                    mp.start();
-                                    ReceiveActivity.packagesref.document(d.getId()).update("lastUpdatedTime",(System.currentTimeMillis()/1000));
+                            Package.sortByTime(list);
 
-                                }else{
+                            for(Package p:list){
 
-                                    if(p.getTargetNode().equals(ReceiveActivity.target)){
+                                if(!done){
 
-                                        Package p1 = new Package(pkgid,p.getSourceNode(),p.getTargetNode(),ReceiveActivity.groupID,Constants.NotInChallan,Constants.PendingProcessing,Constants.scfc,p.getShipmenttype(),ReceiveActivity.target,(System.currentTimeMillis()/1000));
-                                        ReceiveActivity.packagesref.add(p1).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                    if(p.getGroupId().equals(ReceiveActivity.groupID) && !(p.getReconcilationState().equals(Constants.Intransit))){
+
+                                        done = true;
+
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(ScanActivity.this);
+                                        builder.setTitle("ERROR :");
+                                        builder.setMessage("Duplicate Package Received ... ");
+                                        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                             @Override
-                                            public void onSuccess(DocumentReference documentReference) {
-                                                AlertDialog.Builder builder = new AlertDialog.Builder(ScanActivity.this);
-                                                builder.setTitle("Error :");
-                                                builder.setMessage("This Package is NOT IN CHALLAN ... ");
-                                                builder.setPositiveButton("Scan More", new DialogInterface.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(DialogInterface dialog, int which) {
-                                                        scannerView.startCamera();
-                                                        scannerView.resumeCameraPreview(ScanActivity.this);
-                                                    }
-                                                }).setNeutralButton("Done", new DialogInterface.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(DialogInterface dialog, int which) {
-                                                        finish();
-                                                    }
-                                                });
-                                                final AlertDialog dlg = builder.create();
-                                                dlg.show();
-                                                dlg.setCancelable(false);
-
-                                                MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.warning_sound);
-                                                mp.start();
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                scannerView.startCamera();
+                                                scannerView.resumeCameraPreview(ScanActivity.this);
                                             }
                                         });
+                                        final AlertDialog dlg = builder.create();
+                                        dlg.show();
+                                        dlg.setCancelable(false);
+                                        MediaPlayer mp = MediaPlayer.create(ScanActivity.this, R.raw.warning_sound);
+                                        mp.start();
+                                        ReceiveActivity.packagesref.document(p.getId()).update("lastUpdatedTime",(System.currentTimeMillis()/1000));
 
                                     }else{
 
-                                        Package p1 = new Package(pkgid,p.getSourceNode(),p.getTargetNode(),ReceiveActivity.groupID,Constants.Missort,Constants.PendingProcessing,Constants.scfc,p.getShipmenttype(),ReceiveActivity.target,(System.currentTimeMillis()/1000));
+                                        if(p.getTargetNode().equals(ReceiveActivity.target)){
 
-                                        ReceiveActivity.packagesref.add(p1).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                            @Override
-                                            public void onSuccess(DocumentReference documentReference) {
-                                                AlertDialog.Builder builder = new AlertDialog.Builder(ScanActivity.this);
-                                                builder.setTitle("Error :");
-                                                Log.e("Check","Found the id with matching different Target i.e. Missort");
-                                                builder.setMessage("This Package is MISSORT ... ");
-                                                builder.setPositiveButton("Scan More", new DialogInterface.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(DialogInterface dialog, int which) {
-                                                        scannerView.startCamera();
-                                                        scannerView.resumeCameraPreview(ScanActivity.this);
-                                                    }
-                                                }).setNeutralButton("Done", new DialogInterface.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(DialogInterface dialog, int which) {
-                                                        finish();
-                                                    }
-                                                });
-                                                final AlertDialog dlg = builder.create();
-                                                dlg.show();
-                                                dlg.setCancelable(false);
-                                                MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.warning_sound);
-                                                mp.start();
-                                            }
-                                        });
+                                            Package p1 = new Package(pkgid,p.getSourceNode(),p.getTargetNode(),ReceiveActivity.groupID,Constants.NotInChallan,Constants.PendingProcessing,Constants.scfc,p.getShipmenttype(),ReceiveActivity.target,(System.currentTimeMillis()/1000));
+                                            ReceiveActivity.packagesref.add(p1).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                                @Override
+                                                public void onSuccess(DocumentReference documentReference) {
+                                                    AlertDialog.Builder builder = new AlertDialog.Builder(ScanActivity.this);
+                                                    builder.setTitle("Error :");
+                                                    builder.setMessage("This Package is NOT IN CHALLAN ... ");
+                                                    builder.setPositiveButton("Scan More", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialog, int which) {
+                                                            scannerView.startCamera();
+                                                            scannerView.resumeCameraPreview(ScanActivity.this);
+                                                        }
+                                                    }).setNeutralButton("Done", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialog, int which) {
+                                                            finish();
+                                                        }
+                                                    });
+                                                    final AlertDialog dlg = builder.create();
+                                                    dlg.show();
+                                                    dlg.setCancelable(false);
+
+                                                    MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.warning_sound);
+                                                    mp.start();
+                                                }
+                                            });
+
+                                        }else{
+
+                                            Package p1 = new Package(pkgid,p.getSourceNode(),p.getTargetNode(),ReceiveActivity.groupID,Constants.Missort,Constants.PendingProcessing,Constants.scfc,p.getShipmenttype(),ReceiveActivity.target,(System.currentTimeMillis()/1000));
+
+                                            ReceiveActivity.packagesref.add(p1).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                                @Override
+                                                public void onSuccess(DocumentReference documentReference) {
+                                                    AlertDialog.Builder builder = new AlertDialog.Builder(ScanActivity.this);
+                                                    builder.setTitle("Error :");
+                                                    Log.e("Check","Found the id with matching different Target i.e. Missort");
+                                                    builder.setMessage("This Package is MISSORT ... ");
+                                                    builder.setPositiveButton("Scan More", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialog, int which) {
+                                                            scannerView.startCamera();
+                                                            scannerView.resumeCameraPreview(ScanActivity.this);
+                                                        }
+                                                    }).setNeutralButton("Done", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialog, int which) {
+                                                            finish();
+                                                        }
+                                                    });
+                                                    final AlertDialog dlg = builder.create();
+                                                    dlg.show();
+                                                    dlg.setCancelable(false);
+                                                    MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.warning_sound);
+                                                    mp.start();
+                                                }
+                                            });
+
+                                        }
 
                                     }
 
                                 }
+
                             }
                         }else {
 
@@ -412,7 +431,7 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
 
             scannerView.stopCamera();
 
-            ReceiveActivity.packagesref.whereEqualTo("trackingId",pkgid).whereEqualTo("targetNode",ReceiveActivity.target).whereEqualTo("groupId",ReceiveActivity.groupID).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            ReceiveActivity.packagesref.whereEqualTo("trackingId",pkgid).whereEqualTo("targetNode",ReceiveActivity.target).whereEqualTo("groupId",ReceiveActivity.groupID).whereEqualTo("transactionType",ReceiveActivity.trans_spinner.getSelectedItem().toString()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                 @Override
                 public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
 
@@ -441,6 +460,24 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
                                 MediaPlayer mp = MediaPlayer.create(ScanActivity.this, R.raw.warning_sound);
                                 mp.start();
                                 ReceiveActivity.packagesref.document(d.getId()).update("lastUpdatedTime",(System.currentTimeMillis()/1000));
+
+                            }else{
+
+                                AlertDialog.Builder builder = new AlertDialog.Builder(ScanActivity.this);
+                                builder.setTitle("Error :");
+                                builder.setMessage("Something went Wrong ... ");
+                                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        scannerView.startCamera();
+                                        scannerView.resumeCameraPreview(ScanActivity.this);
+                                    }
+                                });
+                                final AlertDialog dlg = builder.create();
+                                dlg.show();
+                                dlg.setCancelable(false);
+                                MediaPlayer mp = MediaPlayer.create(ScanActivity.this, R.raw.warning_sound);
+                                mp.start();
 
                             }
 

@@ -15,12 +15,11 @@
 
     <TextView
         android:layout_width="match_parent"
-        android:textSize="20dp"
+        android:textSize="16dp"
         android:id="@+id/textlayout"
-        android:textStyle="bold"
         android:background="@drawable/ripple_effect"
         android:shadowColor="#ffffff"
-        android:textColor="#5c4200"
+        android:textColor="@color/black"
         android:shadowDx="2"
         android:padding="8dp"
         android:shadowDy="2"

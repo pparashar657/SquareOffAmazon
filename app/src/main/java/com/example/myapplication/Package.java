@@ -4,6 +4,8 @@ import com.google.firebase.database.Exclude;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class Package implements Serializable {
@@ -111,6 +113,23 @@ public class Package implements Serializable {
             }
         }
         return null;
+    }
+
+    public static void sortByTime(List<Package> list){
+        Collections.sort(list,new MyComp());
+    }
+
+
+    static class MyComp implements Comparator<Package> {
+
+        @Override
+        public int compare(Package p1, Package p2) {
+            if(p1.getLastUpdatedTime() < p2.getLastUpdatedTime()){
+                return 1;
+            } else {
+                return -1;
+            }
+        }
     }
 
 }

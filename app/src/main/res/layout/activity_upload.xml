@@ -12,7 +12,7 @@
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"
-        android:background="#8aacc8"
+        android:background="@color/secondaryDarkColor"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -37,12 +37,12 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            android:shadowColor="#ffffff"
+            android:shadowColor="#000000"
             android:shadowDx="2"
             android:shadowDy="2"
             android:shadowRadius="4"
             android:text="Manifest Upload"
-            android:textColor="#000000"
+            android:textColor="#ffffff"
             android:textSize="30dp"
             android:textStyle="bold"
             android:transitionName="transitiontext"
@@ -75,7 +75,7 @@
             android:text="Transaction Type :"
             android:textColor="#5c4200"
             android:textSize="20dp"
-            android:textStyle="bold|italic"
+            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -105,7 +105,7 @@
             android:text="Source Node :"
             android:textColor="#5c4200"
             android:textSize="20dp"
-            android:textStyle="bold|italic"
+            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/transtext" />
 
@@ -135,7 +135,7 @@
             android:text="Destination Node :"
             android:textColor="#5c4200"
             android:textSize="20dp"
-            android:textStyle="bold|italic"
+            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/sourcetext" />
 
@@ -165,7 +165,7 @@
             android:text="Shipment Type :"
             android:textColor="#5c4200"
             android:textSize="20dp"
-            android:textStyle="bold|italic"
+            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/targettext" />
 
@@ -190,7 +190,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
-            app:cardBackgroundColor="@color/wheat"
+            app:cardBackgroundColor="#e8e8e8"
             app:cardCornerRadius="16dp"
             app:cardElevation="8dp"
             app:layout_constraintBottom_toTopOf="@+id/upload"
@@ -245,8 +245,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="30dp"
-                    android:backgroundTint="@color/orange"
+                    android:backgroundTint="#F4CD72"
                     android:text="Choose File"
+                    android:textColor="@color/black"
                     app:layout_constraintBottom_toTopOf="@+id/summary"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
@@ -255,8 +256,9 @@
                     android:id="@+id/scan_items"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/orange"
+                    android:backgroundTint="#F4CD72"
                     android:text="Scan Items"
+                    android:textColor="@color/black"
                     app:layout_constraintBottom_toBottomOf="@+id/choose_file"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/choose_file" />
@@ -291,9 +293,11 @@
             android:id="@+id/upload"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/gradient"
             android:layout_marginEnd="70dp"
+            android:backgroundTint="@color/secondaryColor"
             android:layout_marginBottom="16dp"
-            android:backgroundTint="@color/green"
+            android:textColor="@color/black"
             android:text="Upload"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />

@@ -26,7 +26,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:translationX="-200dp"
-            app:cardBackgroundColor="#8aacc8"
+            app:cardBackgroundColor="@color/secondaryLightColor"
             app:cardCornerRadius="16dp"
             app:cardElevation="8dp"
             app:cardUseCompatPadding="true"
@@ -36,6 +36,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
+                android:padding="8dp"
                 android:layout_height="match_parent">
 
                 <androidx.appcompat.widget.AppCompatImageView
@@ -60,15 +61,15 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginBottom="8dp"
-                    android:shadowColor="#ffffff"
+                    android:shadowColor="#000000"
                     android:shadowDx="2"
                     android:shadowDy="2"
                     android:shadowRadius="4"
                     android:text="Manifest Upload"
                     android:transitionName="transitiontext"
-                    android:textColor="#000000"
+                    android:textColor="#ffffff"
                     android:textSize="30dp"
-                    android:textStyle="bold|italic"
+                    android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/appCompatImageView"
@@ -86,7 +87,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:translationX="200dp"
-            app:cardBackgroundColor="#c1795e"
+            app:cardBackgroundColor="@color/secondaryLightColor"
             app:cardCornerRadius="16dp"
             app:cardElevation="8dp"
             app:cardUseCompatPadding="true"
@@ -96,6 +97,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
+                android:padding="8dp"
                 android:layout_height="match_parent">
 
                 <androidx.appcompat.widget.AppCompatImageView
@@ -118,15 +120,15 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginBottom="8dp"
-                    android:shadowColor="#ffffff"
+                    android:shadowColor="#000000"
                     android:shadowDx="2"
                     android:shadowDy="2"
                     android:shadowRadius="4"
                     android:text="Receive Package"
-                    android:textColor="#000000"
+                    android:textColor="#ffffff"
                     android:transitionName="transitiontext"
                     android:textSize="30dp"
-                    android:textStyle="bold|italic"
+                    android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/appCompatImageView1"
@@ -144,7 +146,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:translationX="-200dp"
-            app:cardBackgroundColor="#f9f8e1"
+            app:cardBackgroundColor="@color/secondaryLightColor"
             app:cardCornerRadius="16dp"
             app:cardElevation="8dp"
             app:cardUseCompatPadding="true"
@@ -154,6 +156,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
+                android:padding="8dp"
                 android:layout_height="match_parent">
 
                 <androidx.appcompat.widget.AppCompatImageView
@@ -176,15 +179,15 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginBottom="8dp"
-                    android:shadowColor="#ffffff"
+                    android:shadowColor="#000000"
                     android:shadowDx="2"
                     android:shadowDy="2"
                     android:shadowRadius="4"
                     android:text="Problem Solve"
                     android:transitionName="transitiontext"
-                    android:textColor="#000000"
+                    android:textColor="#ffffff"
                     android:textSize="30dp"
-                    android:textStyle="bold|italic"
+                    android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/appCompatImageView2"
