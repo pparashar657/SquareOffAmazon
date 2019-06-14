@@ -73,9 +73,8 @@
             android:shadowDy="2"
             android:shadowRadius="4"
             android:text="Transaction Type :"
-            android:textColor="#5c4200"
+            android:textColor="@color/black"
             android:textSize="20dp"
-            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -103,9 +102,8 @@
             android:shadowDy="2"
             android:shadowRadius="4"
             android:text="Source Node :"
-            android:textColor="#5c4200"
+            android:textColor="@color/black"
             android:textSize="20dp"
-            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/transtext" />
 
@@ -133,9 +131,8 @@
             android:shadowDy="2"
             android:shadowRadius="4"
             android:text="Destination Node :"
-            android:textColor="#5c4200"
+            android:textColor="@color/black"
             android:textSize="20dp"
-            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/sourcetext" />
 
@@ -163,9 +160,8 @@
             android:shadowDy="2"
             android:shadowRadius="4"
             android:text="Shipment Type :"
-            android:textColor="#5c4200"
+            android:textColor="@color/black"
             android:textSize="20dp"
-            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/targettext" />
 
@@ -297,7 +293,6 @@
             android:layout_marginEnd="70dp"
             android:backgroundTint="@color/secondaryColor"
             android:layout_marginBottom="16dp"
-            android:textColor="@color/black"
             android:text="Upload"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />

@@ -66,7 +66,6 @@
                 android:text="Tracking ID : "
                 android:textColor="@color/black"
                 android:textSize="20dp"
-                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -116,7 +115,6 @@
                 android:text="XOO/BOO/LPN : "
                 android:textColor="@color/black"
                 android:textSize="20dp"
-                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -168,7 +166,6 @@
                 android:text="Item Quantity : "
                 android:textColor="@color/black"
                 android:textSize="20dp"
-                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -220,7 +217,6 @@
                 android:text="Associated Ticket : "
                 android:textColor="@color/black"
                 android:textSize="20dp"
-                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -271,7 +267,6 @@
                 android:text="Processed At : "
                 android:textColor="@color/black"
                 android:textSize="20dp"
-                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -314,7 +309,6 @@
                 android:text="Marked Under : "
                 android:textColor="@color/black"
                 android:textSize="20dp"
-                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -357,7 +351,6 @@
                 android:text="If Missort, New tracking ID : "
                 android:textColor="@color/black"
                 android:textSize="20dp"
-                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -409,7 +402,6 @@
                 android:text="Comments : "
                 android:textColor="@color/black"
                 android:textSize="20dp"
-                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -454,7 +446,6 @@
             android:layout_marginBottom="16dp"
             android:backgroundTint="@color/secondaryColor"
             android:text="Submit"
-            android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
