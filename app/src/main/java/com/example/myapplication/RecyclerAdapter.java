@@ -44,6 +44,11 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
         notifyItemRemoved(position);
     }
 
+    public void addItem(String id) {
+        UploadActivity.trId.add(id);
+        notifyDataSetChanged();
+    }
+
     public static class MyViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener{
 
         TextView packageId;

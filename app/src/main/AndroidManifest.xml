@@ -26,9 +26,6 @@
         <activity android:name=".ScanActivity" />
         <activity android:name=".UploadSummaryActivity" />
         <activity
-            android:name=".FindItemActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".ProblemSolveActivity"
             android:screenOrientation="portrait" />
         <activity

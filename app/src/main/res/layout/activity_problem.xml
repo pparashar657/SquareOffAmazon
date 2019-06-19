@@ -70,25 +70,51 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            <RelativeLayout
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:background="@drawable/border2"
                 android:layout_marginEnd="16dp"
-                android:hint="Tracking ID"
-                android:textColorHint="@color/black"
-                app:boxStrokeColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/track"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/black" />
 
-            </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputLayout2"
+                    android:layout_width="110dp"
+                    android:layout_height="wrap_content"
+                    android:layout_toStartOf="@id/scan"
+                    app:boxStrokeColor="@color/black"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/scan"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/track"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"
+                        android:layout_marginBottom="10dp"
+                        android:background="@null"
+                        android:imeOptions="actionGo"
+                        android:textColor="@color/black" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/scan"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_alignTop="@id/textInputLayout2"
+                    android:layout_alignBottom="@id/textInputLayout2"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="4dp"
+                    android:src="@drawable/scanimg" />
+
+            </RelativeLayout>
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -124,8 +150,6 @@
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
-                android:hint="XOO/BOO/LPN"
-                android:textColorHint="@color/black"
                 app:boxStrokeColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -134,6 +158,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/lpn"
                     android:layout_width="match_parent"
+                    android:inputType="text"
                     android:layout_height="wrap_content"
                     android:imeOptions="actionGo"
                     android:textColor="@color/black" />
@@ -175,8 +200,6 @@
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
-                android:hint="Item Quantity "
-                android:textColorHint="@color/black"
                 app:boxStrokeColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -186,6 +209,7 @@
                     android:id="@+id/quantity"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:inputType="text"
                     android:imeOptions="actionNext"
                     android:textColor="@color/black" />
 
@@ -226,8 +250,6 @@
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
-                android:hint="Associated Ticket"
-                android:textColorHint="@color/black"
                 app:boxStrokeColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -237,6 +259,7 @@
                     android:id="@+id/ticket"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:inputType="text"
                     android:textColor="@color/black" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -360,8 +383,6 @@
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
-                android:hint="New Tracking ID "
-                android:textColorHint="@color/black"
                 app:boxStrokeColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -369,6 +390,7 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/newtrackingid"
+                    android:inputType="text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black" />
@@ -411,8 +433,6 @@
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
-                android:hint="Comments"
-                android:textColorHint="@color/black"
                 app:boxStrokeColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -478,9 +498,5 @@
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout11" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-
 
 </ScrollView>

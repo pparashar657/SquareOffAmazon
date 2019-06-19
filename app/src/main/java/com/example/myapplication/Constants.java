@@ -23,4 +23,5 @@ public class Constants {
     public static final String ShipmentType = "Type ..";
     public static final String Regular = "Regular";
     public static final String Damaged = "Damaged";
+    public static final String Destroyed = "Damaged and Destroy";
 }

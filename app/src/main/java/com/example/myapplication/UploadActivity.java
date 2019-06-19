@@ -195,13 +195,8 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
 
 
     private void summary() {
-        if(trId.isEmpty()){
-            Snackbar.make(par,"Nothing To Show ....",Snackbar.LENGTH_LONG).show();
-        } else{
-            intent = new Intent(this, UploadSummaryActivity.class);
-            startActivity(intent);
-        }
-
+        intent = new Intent(this, UploadSummaryActivity.class);
+        startActivity(intent);
     }
 
     private void home() {

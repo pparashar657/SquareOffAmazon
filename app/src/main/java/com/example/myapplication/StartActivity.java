@@ -40,7 +40,5 @@ public class StartActivity extends AppCompatActivity {
         animation2.setDuration(1000);
         animation2.start();
 
-
-
     }
 }

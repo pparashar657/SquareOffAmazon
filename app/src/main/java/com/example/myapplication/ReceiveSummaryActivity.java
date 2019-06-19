@@ -78,7 +78,7 @@ public class ReceiveSummaryActivity extends AppCompatActivity implements View.On
 
         db = FirebaseFirestore.getInstance();
         packagesref = db.collection(Constants.PackageCollectionName);
-        packagesref.whereEqualTo("groupId",ReceiveActivity.groupID).whereEqualTo("currentNode",ReceiveActivity.target).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        packagesref.whereEqualTo("groupId",ReceiveActivity.groupID).whereEqualTo("currentNode",ReceiveActivity.target).whereEqualTo("transactionType",ReceiveActivity.trans_spinner.getSelectedItem().toString()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 if(!queryDocumentSnapshots.isEmpty()){

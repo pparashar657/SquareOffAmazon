@@ -11,6 +11,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.media.Image;
 import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -23,6 +24,7 @@ import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -61,17 +63,18 @@ public class Problem extends AppCompatActivity implements View.OnClickListener {
     ConstraintLayout trackingidlayout,newtrackinglayout;
     ConstraintLayout parent;
     TextView heading;
-    TextInputEditText trackingid,lpn,quantity,ticket,newtrackingid,comments;
+    static TextInputEditText trackingid,lpn,quantity,ticket,newtrackingid,comments;
     MaterialSpinner processedat,marked;
     ArrayAdapter<CharSequence> adapter;
     MaterialButton submit;
     FloatingActionButton camera;
-    ImageView image;
+    ImageView image,scan;
     Bitmap imageBitmap;
     ProgressBar progress;
     String storageId;
     String idstring="",lpnstring="",quantitystring="",ticketstring="",processedstring="",markedstring="",newidstring="",commentsstring="";
     CollectionReference packageref;
+    boolean isPhotoNeeded = false;
 
     private StorageReference storageReference;
 
@@ -134,6 +137,7 @@ public class Problem extends AppCompatActivity implements View.OnClickListener {
         db = FirebaseFirestore.getInstance();
         storageReference = FirebaseStorage.getInstance().getReference();
         heading = (TextView) findViewById(R.id.heading);
+        scan = (ImageView) findViewById(R.id.scan);
         parent = (ConstraintLayout) findViewById(R.id.par);
         submit = (MaterialButton) findViewById(R.id.materialButton2) ;
         camera = (FloatingActionButton) findViewById(R.id.camera);
@@ -141,6 +145,7 @@ public class Problem extends AppCompatActivity implements View.OnClickListener {
         submit .setOnClickListener(this);
         camera.setOnClickListener(this);
         image.setOnClickListener(this);
+        scan.setOnClickListener(this);
         progress = (ProgressBar) findViewById(R.id.progress);
         trackingidlayout = (ConstraintLayout) findViewById(R.id.constraintLayout4);
         newtrackinglayout = (ConstraintLayout) findViewById(R.id.constraintLayout10);
@@ -152,6 +157,21 @@ public class Problem extends AppCompatActivity implements View.OnClickListener {
         comments = (TextInputEditText) findViewById(R.id.comments);
         processedat = (MaterialSpinner) findViewById(R.id.process_spinner);
         marked = (MaterialSpinner) findViewById(R.id.marked_spinner);
+        marked.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if(position == 6){
+                    isPhotoNeeded = true;
+                }else{
+                    isPhotoNeeded = false;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         adapter = ArrayAdapter.createFromResource(this,R.array.FCs, R.layout.textlayoutspinner);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -201,6 +221,14 @@ public class Problem extends AppCompatActivity implements View.OnClickListener {
                 startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
                 break;
             }
+
+            case R.id.scan:{
+
+                Intent intent = new Intent(this,ScanActivity.class);
+                intent.putExtra("Type","GetId");
+                startActivity(intent);
+                break;
+            }
         }
 
     }
@@ -231,7 +259,7 @@ public class Problem extends AppCompatActivity implements View.OnClickListener {
         }else if(markedstring.equals(Constants.choose)){
             Snackbar.make(parent,"Please provide a Marked Under category ...", Snackbar.LENGTH_LONG).show();
             return false;
-        }else if(imageBitmap == null){
+        }else if(markedstring.equals(Constants.Destroyed) && imageBitmap == null){
             Snackbar.make(parent,"Please take an image of the package ...", Snackbar.LENGTH_LONG).show();
             return false;
         }else{
@@ -284,36 +312,42 @@ public class Problem extends AppCompatActivity implements View.OnClickListener {
 
         CollectionReference problemref = db.collection(Constants.ProblemCollectionName);
         ProblemDetail prblm = new ProblemDetail(idstring,lpnstring,quantitystring,processedstring,markedstring,newidstring,commentsstring,(System.currentTimeMillis())/1000);
-        Log.e("object",prblm.getTrackingId());
         problemref.add(prblm).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
             public void onSuccess(DocumentReference documentReference) {
-                storageId = documentReference.getId();
-                StorageReference filepath = storageReference.child("Photo").child(storageId);
-                filepath.putFile(getImageUri(Problem.this,imageBitmap)).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(Problem.this);
-                        builder.setTitle("Success :");
-                        builder.setMessage("Record Added Successfully ...");
-                        builder.setPositiveButton("Ok", null);
-                        AlertDialog alert = builder.create();
-                        alert.show();
-                        alert.setCancelable(false);
-                        MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.success_sound);
-                        mp.start();
-                        progress.setVisibility(View.INVISIBLE);
-                        submit.setVisibility(View.VISIBLE);
-                        clearall();
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Snackbar.make(parent,e.getMessage(),Snackbar.LENGTH_LONG).show();
-                        progress.setVisibility(View.INVISIBLE);
-                        submit.setVisibility(View.VISIBLE);
-                    }
-                });
+
+                if(imageBitmap!=null){
+
+                    storageId = documentReference.getId();
+                    StorageReference filepath = storageReference.child("Photo").child(storageId);
+                    filepath.putFile(getImageUri(Problem.this,imageBitmap)).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Snackbar.make(parent,e.getMessage(),Snackbar.LENGTH_LONG).show();
+                            progress.setVisibility(View.INVISIBLE);
+                            submit.setVisibility(View.VISIBLE);
+                        }
+                    });
+
+                }
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(Problem.this);
+                builder.setTitle("Success :");
+                builder.setMessage("Record Added Successfully ...");
+                builder.setPositiveButton("Ok", null);
+                AlertDialog alert = builder.create();
+                alert.show();
+                alert.setCancelable(false);
+                MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.success_sound);
+                mp.start();
+                progress.setVisibility(View.INVISIBLE);
+                submit.setVisibility(View.VISIBLE);
+                clearall();
             }
         });
 
@@ -334,27 +368,10 @@ public class Problem extends AppCompatActivity implements View.OnClickListener {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
 
-                if(queryDocumentSnapshots.isEmpty()){
-                    AlertDialog.Builder builder = new AlertDialog.Builder(Problem.this);
-                    builder.setTitle("Error :");
-                    builder.setMessage(" Tracking Id not Found ...");
-                    builder.setPositiveButton("Ok", null);
-                    AlertDialog alert = builder.create();
-                    alert.show();
-                    alert.setCancelable(false);
-                    MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.warning_sound);
-                    mp.start();
-                    progress.setVisibility(View.INVISIBLE);
-                    submit.setVisibility(View.VISIBLE);
-
-                } else {
-                    Log.e("Size of query",""+queryDocumentSnapshots.size());
                     for(QueryDocumentSnapshot d:queryDocumentSnapshots){
                         packageref.document(d.getId()).update("processingState",Constants.Processed,"currentNode",processedstring,"lastUpdatedTime",(System.currentTimeMillis()/1000));
                     }
                     update();
-
-                }
             }
         });
 

@@ -32,16 +32,16 @@ public class HomeActivity extends AppCompatActivity implements View .OnClickList
         card2 = (CardView) findViewById(R.id.materialCardView2);
 
         ObjectAnimator animation = ObjectAnimator.ofFloat(card,"translationX",0f);
-        animation.setDuration(1000);
+        animation.setDuration(1100);
         animation.start();
 
-        ObjectAnimator animation1 = ObjectAnimator.ofFloat(card1,"translationX",-0f);
-        animation1.setDuration(1000);
+        ObjectAnimator animation1 = ObjectAnimator.ofFloat(card1,"translationX",0f);
+        animation1.setDuration(900);
         animation1.start();
 
 
         ObjectAnimator animation2 = ObjectAnimator.ofFloat(card2,"translationX",0f);
-        animation2.setDuration(1000);
+        animation2.setDuration(700);
         animation2.start();
 
         card.setOnClickListener(this);

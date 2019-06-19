@@ -197,6 +197,7 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/newtrackingid"
                         android:layout_width="match_parent"
+                        android:inputType="text"
                         android:layout_height="wrap_content"
                         android:textColor="@color/black" />
 
@@ -279,6 +280,7 @@
                         android:id="@+id/trackingid"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:inputType="text"
                         android:textColor="@color/black" />
                 </com.google.android.material.textfield.TextInputLayout>
 

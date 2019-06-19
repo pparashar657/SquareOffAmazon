@@ -55,6 +55,7 @@ public class ReceiveActivity extends AppCompatActivity implements View.OnClickLi
     Intent intent;
     static List<Package> mypackages;
     static Spinner shipmentType;
+    static int pendingShipments = 0;
 
     static boolean flag;
 
@@ -366,9 +367,18 @@ public class ReceiveActivity extends AppCompatActivity implements View.OnClickLi
 
     }
     private void scan() {
-        intent = new Intent(this,ScanActivity.class);
-        intent.putExtra("Type","Receive");
-        startActivity(intent);
+
+        if(!(isSCFC) && shipmentType.getSelectedItem().toString().equals(Constants.ShipmentType)){
+            Snackbar.make(parent,"Please enter the Shipment Type ...",Snackbar.LENGTH_LONG).show();
+            receive.setVisibility(View.VISIBLE);
+            progressreceive.setVisibility(View.INVISIBLE);
+        }else{
+
+            intent = new Intent(this,ScanActivity.class);
+            intent.putExtra("Type","Receive");
+            startActivity(intent);
+
+        }
     }
 
 
@@ -379,9 +389,6 @@ public class ReceiveActivity extends AppCompatActivity implements View.OnClickLi
 
             if(source_spinner.getSelectedItem().toString().equals(Constants.choose)){
                 Snackbar.make(parent,"Please enter the Source Node ...",Snackbar.LENGTH_LONG).show();
-                return false;
-            }else if(shipmentType.getSelectedItem().toString().equals(Constants.ShipmentType)){
-                Snackbar.make(parent,"Please enter the Shipment Type ...",Snackbar.LENGTH_LONG).show();
                 return false;
             }
         }
@@ -427,6 +434,9 @@ public class ReceiveActivity extends AppCompatActivity implements View.OnClickLi
                         Package p = d.toObject(Package.class);
                         p.setId(d.getId());
                         mypackages.add(p);
+                        if(p.getReconcilationState().equals(Constants.Intransit)){
+                            pendingShipments++;
+                        }
                     }
 
                 }else{
@@ -437,6 +447,8 @@ public class ReceiveActivity extends AppCompatActivity implements View.OnClickLi
                     AlertDialog alert = builder.create();
                     alert.show();
                     alert.setCancelable(false);
+                    MediaPlayer mp = MediaPlayer.create(ReceiveActivity.this, R.raw.warning_sound);
+                    mp.start();
                     submitcheck.setVisibility(View.VISIBLE);
                     progress.setVisibility(View.GONE);
                 }
@@ -481,6 +493,7 @@ public class ReceiveActivity extends AppCompatActivity implements View.OnClickLi
                             AlertDialog.Builder builder = new AlertDialog.Builder(ReceiveActivity.this);
                             builder.setTitle("Success :");
                             builder.setMessage("Package Reconciled... ");
+                            pendingShipments--;
                             builder.setPositiveButton("Ok",null);
                             final AlertDialog dlg = builder.create();
                             dlg.show();
@@ -546,6 +559,8 @@ public class ReceiveActivity extends AppCompatActivity implements View.OnClickLi
 
                                         if(p.getTargetNode().equals(target)){
 
+                                            done = true;
+
                                             Package p1 = new Package(pkgid,p.getSourceNode(),p.getTargetNode(),groupID,Constants.NotInChallan,Constants.PendingProcessing,Constants.scfc,p.getShipmenttype(),target,(System.currentTimeMillis()/1000));
                                             packagesref.add(p1).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                                 @Override
@@ -563,11 +578,14 @@ public class ReceiveActivity extends AppCompatActivity implements View.OnClickLi
                                                     trackingid.setText("");
 
                                                     receive.setVisibility(View.VISIBLE);
-                                                    progressreceive.setVisibility(View.INVISIBLE);                                            }
+                                                    progressreceive.setVisibility(View.INVISIBLE);
+                                                }
 
                                             });
 
                                         }else{
+
+                                            done = true;
 
                                             Package p1 = new Package(pkgid,p.getSourceNode(),p.getTargetNode(),groupID,Constants.Missort,Constants.PendingProcessing,Constants.scfc,p.getShipmenttype(),target,(System.currentTimeMillis()/1000));
                                             packagesref.add(p1).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -605,7 +623,7 @@ public class ReceiveActivity extends AppCompatActivity implements View.OnClickLi
                             builder.setPositiveButton("Yes, Accept", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    packagesref.add(new Package(pkgid,Constants.Unknown,target,groupID,Constants.Unknown,Constants.PendingProcessing,Constants.scfc,Constants.Unknown,target,(System.currentTimeMillis()/1000))).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                    packagesref.add(new Package(pkgid,Constants.Unknown,Constants.Unknown,groupID,Constants.Unknown,Constants.PendingProcessing,Constants.scfc,Constants.Unknown,target,(System.currentTimeMillis()/1000))).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                         @Override
                                         public void onSuccess(DocumentReference documentReference) {
                                             AlertDialog.Builder builder = new AlertDialog.Builder(ReceiveActivity.this);
@@ -620,16 +638,23 @@ public class ReceiveActivity extends AppCompatActivity implements View.OnClickLi
                                             mp.start();
                                             trackingid.setText("");
 
+                                            receive.setVisibility(View.VISIBLE);
+                                            progressreceive.setVisibility(View.INVISIBLE);
+
                                         }
                                     });
                                 }
                             });
-                            builder.setNeutralButton("Cancel",null);
+                            builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    receive.setVisibility(View.VISIBLE);
+                                    progressreceive.setVisibility(View.INVISIBLE);
+                                }
+                            });
                             AlertDialog dlg = builder.create();
                             dlg.show();
                             dlg.setCancelable(false);
-                            receive.setVisibility(View.VISIBLE);
-                            progressreceive.setVisibility(View.INVISIBLE);
                             MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.warning_sound);
                             mp.start();
 
@@ -639,79 +664,89 @@ public class ReceiveActivity extends AppCompatActivity implements View.OnClickLi
             }
         }else{
 
-            packagesref.whereEqualTo("trackingId",pkgid).whereEqualTo("targetNode",target).whereEqualTo("groupId",groupID).whereEqualTo("transactionType",trans_spinner.getSelectedItem().toString()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            if(shipmentType.getSelectedItem().toString().equals(Constants.ShipmentType)){
+                Snackbar.make(parent,"Please enter the Shipment Type ...",Snackbar.LENGTH_LONG).show();
+                receive.setVisibility(View.VISIBLE);
+                progressreceive.setVisibility(View.INVISIBLE);
+            }else{
 
-                @Override
-                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                packagesref.whereEqualTo("trackingId",pkgid).whereEqualTo("targetNode",target).whereEqualTo("groupId",groupID).whereEqualTo("transactionType",trans_spinner.getSelectedItem().toString()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
 
-                    if(!queryDocumentSnapshots.isEmpty()){
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
 
-                        for(QueryDocumentSnapshot d:queryDocumentSnapshots){
+                        if(!queryDocumentSnapshots.isEmpty()){
 
-                            Package p = d.toObject(Package.class);
-                            p.setId(d.getId());
+                            for(QueryDocumentSnapshot d:queryDocumentSnapshots){
 
-                            if(!p.getReconcilationState().equals(Constants.Intransit)){
+                                Package p = d.toObject(Package.class);
+                                p.setId(d.getId());
 
-                                AlertDialog.Builder builder = new AlertDialog.Builder(ReceiveActivity.this);
-                                builder.setTitle("ERROR :");
-                                builder.setMessage("Duplicate Package Received ... ");
-                                builder.setPositiveButton("Ok",null);
-                                final AlertDialog dlg = builder.create();
-                                dlg.show();
-                                dlg.setCancelable(false);
-                                trackingid.setText("");
-                                MediaPlayer mp = MediaPlayer.create(ReceiveActivity.this, R.raw.warning_sound);
-                                mp.start();
-                                packagesref.document(p.getId()).update("lastUpdatedTime",(System.currentTimeMillis()/1000));
-                                trackingid.setText("");
+                                if(!p.getReconcilationState().equals(Constants.Intransit)){
 
-                                receive.setVisibility(View.VISIBLE);
-                                progressreceive.setVisibility(View.INVISIBLE);
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(ReceiveActivity.this);
+                                    builder.setTitle("ERROR :");
+                                    builder.setMessage("Duplicate Package Received ... ");
+                                    builder.setPositiveButton("Ok",null);
+                                    final AlertDialog dlg = builder.create();
+                                    dlg.show();
+                                    dlg.setCancelable(false);
+                                    trackingid.setText("");
+                                    MediaPlayer mp = MediaPlayer.create(ReceiveActivity.this, R.raw.warning_sound);
+                                    mp.start();
+                                    packagesref.document(p.getId()).update("lastUpdatedTime",(System.currentTimeMillis()/1000));
+                                    trackingid.setText("");
 
-                            }else{
-                                Snackbar.make(parent,"Something Went Wrong ...",Snackbar.LENGTH_LONG).show();
-                                trackingid.setText("");
-                                receive.setVisibility(View.VISIBLE);
-                                progressreceive.setVisibility(View.INVISIBLE);
+                                    receive.setVisibility(View.VISIBLE);
+                                    progressreceive.setVisibility(View.INVISIBLE);
+
+                                }else{
+                                    Snackbar.make(parent,"Something Went Wrong ...",Snackbar.LENGTH_LONG).show();
+                                    trackingid.setText("");
+                                    receive.setVisibility(View.VISIBLE);
+                                    progressreceive.setVisibility(View.INVISIBLE);
+
+                                }
 
                             }
+
+                        }else{
+
+                            packagesref.add(new Package(pkgid,source,target,groupID,Constants.Reconciled,Constants.PendingProcessing,trans_spinner.getSelectedItem().toString(),shipment,target,(System.currentTimeMillis()/1000))).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                @Override
+                                public void onSuccess(DocumentReference documentReference) {
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(ReceiveActivity.this);
+                                    builder.setTitle("Success :");
+                                    builder.setMessage("Package Reconciled... ");
+                                    final AlertDialog dlg = builder.create();
+                                    trackingid.setText("");
+                                    dlg.show();
+
+                                    final Timer t = new Timer();
+                                    t.schedule(new TimerTask() {
+                                        public void run() {
+                                            dlg.dismiss();
+                                            t.cancel();
+                                        }
+                                    }, 2000);
+
+                                    MediaPlayer mp = MediaPlayer.create(ReceiveActivity.this, R.raw.success_sound);
+                                    mp.start();
+                                    trackingid.setText("");
+
+                                    receive.setVisibility(View.VISIBLE);
+                                    progressreceive.setVisibility(View.INVISIBLE);
+
+                                }
+                            });
 
                         }
-
-                    }else{
-
-                        packagesref.add(new Package(pkgid,source,target,groupID,Constants.Reconciled,Constants.PendingProcessing,trans_spinner.getSelectedItem().toString(),shipment,target,(System.currentTimeMillis()/1000))).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                            @Override
-                            public void onSuccess(DocumentReference documentReference) {
-                                AlertDialog.Builder builder = new AlertDialog.Builder(ReceiveActivity.this);
-                                builder.setTitle("Success :");
-                                builder.setMessage("Package Reconciled... ");
-                                final AlertDialog dlg = builder.create();
-                                trackingid.setText("");
-                                dlg.show();
-
-                                final Timer t = new Timer();
-                                t.schedule(new TimerTask() {
-                                    public void run() {
-                                        dlg.dismiss();
-                                        t.cancel();
-                                    }
-                                }, 2000);
-
-                                MediaPlayer mp = MediaPlayer.create(ReceiveActivity.this, R.raw.success_sound);
-                                mp.start();
-                                trackingid.setText("");
-
-                                receive.setVisibility(View.VISIBLE);
-                                progressreceive.setVisibility(View.INVISIBLE);
-
-                            }
-                        });
-
                     }
-                }
-            });
+                });
+
+
+            }
+
 
         }
     }
@@ -727,19 +762,29 @@ public class ReceiveActivity extends AppCompatActivity implements View.OnClickLi
 
     private void submit() {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(ReceiveActivity.this);
-        builder.setTitle("Alert :");
-        builder.setMessage("Are you sure you want to Submit? ... ");
-        builder.setPositiveButton("Yes Submit", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                startActivity(new Intent(ReceiveActivity.this,HomeActivity.class));
-                finish();
-            }
-        }).setNeutralButton("Cancel",null);
-        AlertDialog dlg = builder.create();
-        dlg.show();
-        dlg.setCancelable(false);
+        if(pendingShipments > 0){
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(ReceiveActivity.this);
+            builder.setTitle("Alert :");
+            builder.setMessage("You still have few pending shipments to scan under this challan. Do you want to exit? ");
+            Log.e("shipment count",pendingShipments+"");
+            builder.setPositiveButton("Yes Submit", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    startActivity(new Intent(ReceiveActivity.this,HomeActivity.class));
+                    finish();
+                }
+            }).setNeutralButton("Cancel",null);
+            AlertDialog dlg = builder.create();
+            dlg.show();
+            dlg.setCancelable(false);
+
+        }else{
+
+            startActivity(new Intent(ReceiveActivity.this,HomeActivity.class));
+            finish();
+
+        }
 
     }
 

@@ -144,6 +144,13 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
     public void handleResult(Result result) {
         final String myResult = result.getText();
 
+        if(type.equals("GetId")){
+
+            Problem.trackingid.setText(myResult);
+            finish();
+
+        }
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Scan Result");
         if(type.equals("Upload")){
@@ -237,6 +244,7 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
                             AlertDialog.Builder builder = new AlertDialog.Builder(ScanActivity.this);
                             builder.setTitle("Success :");
                             builder.setMessage("Package Reconciled... ");
+                            ReceiveActivity.pendingShipments--;
                             builder.setPositiveButton("Scan More", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -310,6 +318,8 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
 
                                         if(p.getTargetNode().equals(ReceiveActivity.target)){
 
+                                            done = true;
+
                                             Package p1 = new Package(pkgid,p.getSourceNode(),p.getTargetNode(),ReceiveActivity.groupID,Constants.NotInChallan,Constants.PendingProcessing,Constants.scfc,p.getShipmenttype(),ReceiveActivity.target,(System.currentTimeMillis()/1000));
                                             ReceiveActivity.packagesref.add(p1).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                                 @Override
@@ -339,6 +349,8 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
                                             });
 
                                         }else{
+
+                                            done = true;
 
                                             Package p1 = new Package(pkgid,p.getSourceNode(),p.getTargetNode(),ReceiveActivity.groupID,Constants.Missort,Constants.PendingProcessing,Constants.scfc,p.getShipmenttype(),ReceiveActivity.target,(System.currentTimeMillis()/1000));
 
@@ -385,7 +397,7 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
 
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    ReceiveActivity.packagesref.add(new Package(pkgid,Constants.Unknown,ReceiveActivity.target,ReceiveActivity.groupID,Constants.Unknown,Constants.PendingProcessing,Constants.scfc,Constants.Unknown,ReceiveActivity.target,(System.currentTimeMillis()/1000))).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                    ReceiveActivity.packagesref.add(new Package(pkgid,Constants.Unknown,Constants.Unknown,ReceiveActivity.groupID,Constants.Unknown,Constants.PendingProcessing,Constants.scfc,Constants.Unknown,ReceiveActivity.target,(System.currentTimeMillis()/1000))).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                         @Override
                                         public void onSuccess(DocumentReference documentReference) {
                                             AlertDialog.Builder builder = new AlertDialog.Builder(ScanActivity.this);
@@ -418,6 +430,8 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
                             builder.setNeutralButton("Cancel",null);
                             AlertDialog dlg = builder.create();
                             dlg.show();
+                            scannerView.startCamera();
+                            scannerView.resumeCameraPreview(ScanActivity.this);
                             dlg.setCancelable(false);
                             MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.warning_sound);
                             mp.start();
