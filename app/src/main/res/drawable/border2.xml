@@ -4,5 +4,4 @@
     <item android:state_focused="true" android:drawable="@drawable/selected" />
     <item android:state_focused="false" android:drawable="@drawable/normal" />
 
-
 </selector>

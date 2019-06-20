@@ -10,6 +10,6 @@
         android:radius="8dp"
         />
     <solid
-        android:color="@color/cardBackgroundColor"
+        android:color="@color/white"
         />
 </shape>

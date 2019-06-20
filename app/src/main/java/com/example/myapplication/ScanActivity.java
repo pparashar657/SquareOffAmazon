@@ -149,58 +149,42 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
             Problem.trackingid.setText(myResult);
             finish();
 
-        }
+        }else{
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Scan Result");
-        if(type.equals("Upload")){
-            builder.setPositiveButton("Add this Item", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    UploadActivity.trId.add(myResult);
-                    scannerView.stopCamera();
-                    MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.success_sound);
-                    mp.start();
-                    AlertDialog.Builder builder1 = new AlertDialog.Builder(ScanActivity.this);
-                    builder1.setTitle("Success :");
-                    builder1.setMessage("Package Added ... ");
-                    builder1.setPositiveButton("Scan More", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            scannerView.startCamera();
-                            scannerView.resumeCameraPreview(ScanActivity.this);
-                        }
-                    });
-                    builder1.setNeutralButton("Done", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            finish();
-                        }
-                    });
-                    final AlertDialog dlg = builder1.create();
-                    dlg.show();
-                    dlg.setCancelable(false);
-                }
-            });
+            if(type.equals("Upload")){
 
-        }else if(type.equals("Receive")){
-            builder.setPositiveButton("Receive this Item", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    receive(myResult);
-                    scannerView.resumeCameraPreview(ScanActivity.this);
-                }
-            });
-        }
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+                UploadActivity.trId.add(myResult);
+                scannerView.stopCamera();
+                MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.success_sound);
+                mp.start();
+                AlertDialog.Builder builder1 = new AlertDialog.Builder(ScanActivity.this);
+                builder1.setTitle("Success :");
+                builder1.setMessage("Package Added ... ");
+                builder1.setPositiveButton("Scan More", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        scannerView.startCamera();
+                        scannerView.resumeCameraPreview(ScanActivity.this);
+                    }
+                });
+                builder1.setNeutralButton("Done", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                });
+                final AlertDialog dlg = builder1.create();
+                dlg.show();
+                dlg.setCancelable(false);
+
+            }else if(type.equals("Receive")){
+
+                receive(myResult);
                 scannerView.resumeCameraPreview(ScanActivity.this);
+
             }
-        });
-        builder.setMessage(myResult);
-        AlertDialog alert1 = builder.create();
-        alert1.show();
+
+        }
 
     }
 

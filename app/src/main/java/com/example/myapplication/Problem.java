@@ -28,6 +28,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -71,6 +72,7 @@ public class Problem extends AppCompatActivity implements View.OnClickListener {
     ImageView image,scan;
     Bitmap imageBitmap;
     ProgressBar progress;
+    RelativeLayout container;
     String storageId;
     String idstring="",lpnstring="",quantitystring="",ticketstring="",processedstring="",markedstring="",newidstring="",commentsstring="";
     CollectionReference packageref;
@@ -138,6 +140,7 @@ public class Problem extends AppCompatActivity implements View.OnClickListener {
         storageReference = FirebaseStorage.getInstance().getReference();
         heading = (TextView) findViewById(R.id.heading);
         scan = (ImageView) findViewById(R.id.scan);
+        container = (RelativeLayout) findViewById(R.id.containertrack);
         parent = (ConstraintLayout) findViewById(R.id.par);
         submit = (MaterialButton) findViewById(R.id.materialButton2) ;
         camera = (FloatingActionButton) findViewById(R.id.camera);
@@ -150,6 +153,16 @@ public class Problem extends AppCompatActivity implements View.OnClickListener {
         trackingidlayout = (ConstraintLayout) findViewById(R.id.constraintLayout4);
         newtrackinglayout = (ConstraintLayout) findViewById(R.id.constraintLayout10);
         trackingid = (TextInputEditText) findViewById(R.id.track);
+        trackingid.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus){
+                    container.setBackgroundResource(R.drawable.selected);
+                }else{
+                    container.setBackgroundResource(R.drawable.normal);
+                }
+            }
+        });
         lpn = (TextInputEditText) findViewById(R.id.lpn);
         quantity = (TextInputEditText) findViewById(R.id.quantity);
         ticket = (TextInputEditText) findViewById(R.id.ticket);

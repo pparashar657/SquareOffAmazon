@@ -58,19 +58,20 @@
             android:inputType="text"
             android:layout_width="match_parent"
             android:paddingLeft="16dp"
-            android:textColorHint="@color/black"
+            android:textColorHint="@color/gray"
             android:layout_height="50dp"
             android:layout_toStartOf="@id/done" />
 
         <TextView
             android:layout_width="1dp"
             android:layout_marginTop="5dp"
-            android:background="@color/black"
+            android:background="@color/gray"
             android:layout_height="40dp"
             android:layout_toStartOf="@+id/done" />
 
         <ImageView
             android:layout_width="50dp"
+            android:backgroundTint="@color/white"
             android:id="@+id/done"
             android:layout_height="50dp"
             android:layout_alignParentEnd="true"

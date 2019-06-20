@@ -28,15 +28,15 @@ public class StartActivity extends AppCompatActivity {
             }
         });
 
-        ObjectAnimator animation = ObjectAnimator.ofFloat(button,"translationY",-300f);
+        ObjectAnimator animation = ObjectAnimator.ofFloat(button,"translationY",-0f);
         animation.setDuration(1000);
         animation.start();
 
-        ObjectAnimator animation1 = ObjectAnimator.ofFloat(back,"translationY",260f);
+        ObjectAnimator animation1 = ObjectAnimator.ofFloat(back,"translationY",0f);
         animation1.setDuration(1000);
         animation1.start();
 
-        ObjectAnimator animation2 = ObjectAnimator.ofFloat(logo,"translationY",260f);
+        ObjectAnimator animation2 = ObjectAnimator.ofFloat(logo,"translationY",0f);
         animation2.setDuration(1000);
         animation2.start();
 

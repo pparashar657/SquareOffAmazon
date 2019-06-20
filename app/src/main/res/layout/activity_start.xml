@@ -12,13 +12,16 @@
         android:id="@+id/back"
         android:layout_width="match_parent"
         android:layout_height="100dp"
+        android:translationY="-150dp"
         android:background="#000000"
-        app:layout_constraintBottom_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/appCompatImageView"
         android:layout_width="100dp"
+        android:translationY="-150dp"
         android:layout_height="100dp"
         android:background="#000000"
         android:src="@drawable/logo"
@@ -42,11 +45,12 @@
         android:id="@+id/materialButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
         android:backgroundTint="@color/primaryColor"
+        android:translationY="150dp"
         android:text="Get Started!"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/gifImageView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
