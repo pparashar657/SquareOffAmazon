@@ -78,6 +78,7 @@ public class ReceiveActivity extends AppCompatActivity implements View.OnClickLi
         isSCFC = false;
         ThreePFC = false;
         ThreePSC = false;
+        pendingShipments = 0;
 
         parent = findViewById(R.id.receiveparent);
         db = FirebaseFirestore.getInstance();
@@ -419,7 +420,22 @@ public class ReceiveActivity extends AppCompatActivity implements View.OnClickLi
         packagesref.whereEqualTo("groupId",groupID).whereEqualTo("targetNode",target).whereEqualTo("transactionType",trans_spinner.getSelectedItem().toString()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                if(!queryDocumentSnapshots.isEmpty()){
+
+                boolean isOriginal = false;
+                for(QueryDocumentSnapshot d:queryDocumentSnapshots){
+                    Package p = d.toObject(Package.class);
+                    p.setId(d.getId());
+                    mypackages.add(p);
+                    if(p.getReconcilationState().equals(Constants.Intransit)){
+                        pendingShipments++;
+                        isOriginal = true;
+                    }else if(p.getReconcilationState().equals(Constants.Reconciled)){
+                        isOriginal = true;
+                    }
+
+                }
+
+                if(isOriginal){
                     manualbutton.setVisibility(View.VISIBLE);
                     scanbutton.setVisibility(View.VISIBLE);
                     summarybutton.setVisibility(View.VISIBLE);
@@ -430,14 +446,6 @@ public class ReceiveActivity extends AppCompatActivity implements View.OnClickLi
                     dest_spinner.setEnabled(false);
                     groupid.setEnabled(false);
 
-                    for(QueryDocumentSnapshot d:queryDocumentSnapshots){
-                        Package p = d.toObject(Package.class);
-                        p.setId(d.getId());
-                        mypackages.add(p);
-                        if(p.getReconcilationState().equals(Constants.Intransit)){
-                            pendingShipments++;
-                        }
-                    }
 
                 }else{
                     AlertDialog.Builder builder = new AlertDialog.Builder(ReceiveActivity.this);
@@ -494,6 +502,7 @@ public class ReceiveActivity extends AppCompatActivity implements View.OnClickLi
                             builder.setTitle("Success :");
                             builder.setMessage("Package Reconciled... ");
                             pendingShipments--;
+                            Log.e("Shipment",pendingShipments+"");
                             builder.setPositiveButton("Ok",null);
                             final AlertDialog dlg = builder.create();
                             dlg.show();

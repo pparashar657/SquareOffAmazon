@@ -193,6 +193,7 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
         if(ReceiveActivity.isSCFC){
 
             scannerView.stopCamera();
+
             String id = Package.searchbyId(ReceiveActivity.mypackages,pkgid);
 
             // Package Reconciled
@@ -229,6 +230,7 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
                             builder.setTitle("Success :");
                             builder.setMessage("Package Reconciled... ");
                             ReceiveActivity.pendingShipments--;
+                            Log.e("Shipment",ReceiveActivity.pendingShipments+"");
                             builder.setPositiveButton("Scan More", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -373,6 +375,8 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
 
                             }
                         }else {
+
+                            scannerView.stopCamera();
 
                             final AlertDialog.Builder builder = new AlertDialog.Builder(ScanActivity.this);
                             builder.setTitle("Error :");
